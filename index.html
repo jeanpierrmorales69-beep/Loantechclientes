@@ -255,55 +255,36 @@
                                     <label class="block text-xs font-semibold mb-2 opacity-80">WhatsApp o Usuario <span class="text-rose-400">* (Obligatorio)</span></label>
                                     <div class="relative">
                                         <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-emerald-400"><i class="fa-brands fa-whatsapp text-lg"></i></span>
-                                        <input type="text" id="client-whatsapp" required placeholder="Ej. 3151234567 o @usuario" class="w-full pl-10 pr-4 py-3 theme-input border rounded-xl outline-none focus:ring-2 focus:ring-cyan-400 text-sm">
+                                        <input type="text" id="client-whatsapp" required placeholder="Ej. 573151234567" class="w-full pl-10 pr-4 py-3 theme-input border rounded-xl outline-none focus:ring-2 focus:ring-cyan-400 text-sm">
                                     </div>
                                 </div>
+
+                                <!-- DEPARTAMENTO & CIUDAD (OPCIONALES) -->
                                 <div>
-                                    <label class="block text-xs font-semibold mb-2 opacity-80">Ciudad (Colombia) <span class="text-rose-400">* (Obligatorio)</span></label>
-                                    <select id="client-city" required class="w-full px-4 py-3 theme-input border rounded-xl outline-none focus:ring-2 focus:ring-cyan-400 text-sm">
-                                        <option value="" disabled selected>Selecciona una ciudad o municipio...</option>
-                                        <optgroup label="Valle del Cauca">
-                                            <option value="Cali">Cali</option>
-                                            <option value="Palmira">Palmira</option>
-                                            <option value="Jamundí">Jamundí</option>
-                                            <option value="Yumbo">Yumbo</option>
-                                            <option value="Tuluá">Tuluá</option>
-                                            <option value="Buga">Buga</option>
-                                            <option value="Cartago">Cartago</option>
-                                            <option value="Buenaventura">Buenaventura</option>
-                                        </optgroup>
-                                        <optgroup label="Principales Ciudades de Colombia">
-                                            <option value="Bogotá D.C.">Bogotá D.C.</option>
-                                            <option value="Medellín">Medellín</option>
-                                            <option value="Barranquilla">Barranquilla</option>
-                                            <option value="Bucaramanga">Bucaramanga</option>
-                                            <option value="Pereira">Pereira</option>
-                                            <option value="Manizales">Manizales</option>
-                                            <option value="Armenia">Armenia</option>
-                                            <option value="Cúcuta">Cúcuta</option>
-                                            <option value="Ibagué">Ibagué</option>
-                                            <option value="Santa Marta">Santa Marta</option>
-                                            <option value="Cartagena">Cartagena</option>
-                                            <option value="Villavicencio">Villavicencio</option>
-                                            <option value="Pasto">Pasto</option>
-                                            <option value="Popayán">Popayán</option>
-                                            <option value="Neiva">Neiva</option>
-                                            <option value="Montería">Montería</option>
-                                            <option value="Valledupar">Valledupar</option>
-                                        </optgroup>
+                                    <label class="block text-xs font-semibold mb-2 opacity-80">Departamento <span class="text-slate-500 font-normal">(Opcional)</span></label>
+                                    <select id="client-department" onchange="updateCityDropdown('client-department', 'client-city')" class="w-full px-4 py-3 theme-input border rounded-xl outline-none focus:ring-2 focus:ring-cyan-400 text-sm">
+                                        <option value="" selected>Selecciona Departamento...</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold mb-2 opacity-80">Estado de Compra <span class="text-rose-400">* (Obligatorio)</span></label>
-                                    <select id="client-purchase-status" onchange="toggleFinanceField()" required class="w-full px-4 py-3 theme-input border rounded-xl outline-none focus:ring-2 focus:ring-cyan-400 text-sm">
-                                        <option value="" disabled selected>Selecciona estado de compra...</option>
-                                        <option value="Compró">Compró</option>
-                                        <option value="Ya compró">Ya compró</option>
-                                        <option value="No compró">No compró</option>
-                                        <option value="Está pensándolo">Está pensándolo</option>
+                                    <label class="block text-xs font-semibold mb-2 opacity-80">Ciudad / Municipio <span class="text-slate-500 font-normal">(Opcional)</span></label>
+                                    <select id="client-city" class="w-full px-4 py-3 theme-input border rounded-xl outline-none focus:ring-2 focus:ring-cyan-400 text-sm">
+                                        <option value="" selected>Selecciona Ciudad...</option>
                                     </select>
                                 </div>
 
+                                <div>
+                                    <label class="block text-xs font-semibold mb-2 opacity-80">Estado de Compra <span class="text-rose-400">* (Obligatorio)</span></label>
+                                    <select id="client-purchase-status" onchange="togglePurchaseOptions()" required class="w-full px-4 py-3 theme-input border rounded-xl outline-none focus:ring-2 focus:ring-cyan-400 text-sm">
+                                        <option value="" disabled selected>Selecciona estado de compra...</option>
+                                        <option value="No compró">1. No compró</option>
+                                        <option value="Compró">2. Compró</option>
+                                        <option value="Quedó de venir">3. Quedó de venir</option>
+                                        <option value="No responde">4. No responde</option>
+                                    </select>
+                                </div>
+
+                                <!-- CAMPO SI COMPRÓ -->
                                 <div id="finance-field-container" class="hidden">
                                     <label class="block text-xs font-semibold mb-2 text-emerald-400">Por dónde fue la venta <span class="text-rose-400">* (Obligatorio)</span></label>
                                     <select id="client-finance-platform" class="w-full px-4 py-3 theme-input border-2 border-emerald-500/50 rounded-xl outline-none focus:ring-2 focus:ring-emerald-400 text-sm font-bold text-emerald-300">
@@ -312,17 +293,14 @@
                                         <option value="Payjoy">Payjoy</option>
                                         <option value="E-credit">E-credit</option>
                                         <option value="Con cupo">Con cupo</option>
+                                        <option value="De contado">De contado</option>
                                     </select>
                                 </div>
 
-                                <div>
-                                    <label class="block text-xs font-semibold mb-2 opacity-80">Estado de Compromiso <span class="text-slate-500 font-normal">(Opcional)</span></label>
-                                    <select id="client-commitment-status" class="w-full px-4 py-3 theme-input border rounded-xl outline-none focus:ring-2 focus:ring-cyan-400 text-sm">
-                                        <option value="Sin especificar" selected>Sin especificar...</option>
-                                        <option value="Quedó de venir">Quedó de venir</option>
-                                        <option value="Va a hacer el proceso">Va a hacer el proceso</option>
-                                        <option value="No quedó en nada">No quedó en nada</option>
-                                    </select>
+                                <!-- CAMPO SI QUEDÓ DE VENIR -->
+                                <div id="visit-date-container" class="hidden">
+                                    <label class="block text-xs font-semibold mb-2 text-cyan-400">Fecha acordada de visita <span class="text-rose-400">* (Obligatorio)</span></label>
+                                    <input type="date" id="client-visit-date" class="w-full px-4 py-3 theme-input border-2 border-cyan-500/50 rounded-xl outline-none focus:ring-2 focus:ring-cyan-400 text-sm font-bold text-cyan-300">
                                 </div>
                             </div>
 
@@ -361,10 +339,10 @@
                                     <tr>
                                         <th class="py-3 px-4">Fecha</th>
                                         <th class="py-3 px-4">Cliente / CC</th>
-                                        <th class="py-3 px-4">WhatsApp/Usuario</th>
-                                        <th class="py-3 px-4">Ciudad</th>
+                                        <th class="py-3 px-4">WhatsApp</th>
+                                        <th class="py-3 px-4">Ubicación</th>
                                         <th class="py-3 px-4">Estado</th>
-                                        <th class="py-3 px-4">Venta Por</th>
+                                        <th class="py-3 px-4">Venta / Visita</th>
                                         <th class="py-3 px-4">Asesor</th>
                                         <th class="py-3 px-4 text-center">Acciones</th>
                                     </tr>
@@ -384,7 +362,7 @@
                             </div>
                             <div>
                                 <h2 class="text-xl font-bold">Recalentar Prospectos (WhatsApp - Modelo AIDA)</h2>
-                                <p class="text-xs opacity-70">Selecciona la estrategia AIDA para enviar el mensaje perfecto por WhatsApp.</p>
+                                <p class="text-xs opacity-70">Lista de prospectos pendientes (No compró, Quedó de venir, No responde).</p>
                             </div>
                         </div>
 
@@ -404,9 +382,9 @@
                                 <thead class="bg-black/40 uppercase font-semibold border-b border-slate-800">
                                     <tr>
                                         <th class="py-3 px-4">Cliente</th>
-                                        <th class="py-3 px-4">WhatsApp/Usuario</th>
-                                        <th class="py-3 px-4">Ciudad</th>
-                                        <th class="py-3 px-4">Estado</th>
+                                        <th class="py-3 px-4">WhatsApp</th>
+                                        <th class="py-3 px-4">Ubicación</th>
+                                        <th class="py-3 px-4">Estado / Visita</th>
                                         <th class="py-3 px-4">Estado Recalentado</th>
                                         <th class="py-3 px-4 text-center">Acción Directa</th>
                                     </tr>
@@ -459,7 +437,7 @@
                                     <thead class="bg-black/40 uppercase font-semibold border-b border-slate-800">
                                         <tr>
                                             <th class="py-2 px-3">Cliente</th>
-                                            <th class="py-2 px-3">WhatsApp/Usuario</th>
+                                            <th class="py-2 px-3">WhatsApp</th>
                                             <th class="py-2 px-3">Asesor Asignado</th>
                                             <th class="py-2 px-3">Estado Recalentado</th>
                                         </tr>
@@ -471,7 +449,7 @@
                     </div>
                 </section>
 
-                <!-- TAB 5: CONFIGURACIÓN (SOLO ADMIN JEAN) -->
+                <!-- TAB 5: CONFIGURACIÓN (ADMIN) -->
                 <section id="tab-admin" class="tab-content hidden space-y-6">
                     <div class="theme-card border border-purple-500/30 rounded-2xl p-6 sm:p-8 shadow-xl space-y-6">
                         <div class="flex items-center gap-3 pb-4 border-b border-slate-800">
@@ -547,6 +525,83 @@
         </div>
     </div>
 
+    <!-- MODAL DE EDICIÓN DE CLIENTE -->
+    <div id="edit-client-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
+        <div class="w-full max-w-2xl theme-card border rounded-2xl p-6 sm:p-8 shadow-2xl space-y-6 my-8">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="font-bold text-lg text-cyan-400 flex items-center gap-2">
+                    <i class="fa-solid fa-pen-to-square"></i> Editar Cliente
+                </h3>
+                <button onclick="closeEditModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+
+            <form id="edit-client-form" onsubmit="handleEditClientSubmit(event)" class="space-y-4">
+                <input type="hidden" id="edit-client-id">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold mb-1 opacity-80">Nombre Completo</label>
+                        <input type="text" id="edit-client-name" class="w-full px-3 py-2 theme-input border rounded-xl text-xs outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold mb-1 opacity-80">Identificación CC / PPT</label>
+                        <input type="text" id="edit-client-doc" class="w-full px-3 py-2 theme-input border rounded-xl text-xs outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold mb-1 opacity-80">WhatsApp *</label>
+                        <input type="text" id="edit-client-whatsapp" required class="w-full px-3 py-2 theme-input border rounded-xl text-xs outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold mb-1 opacity-80">Departamento</label>
+                        <select id="edit-client-department" onchange="updateCityDropdown('edit-client-department', 'edit-client-city')" class="w-full px-3 py-2 theme-input border rounded-xl text-xs outline-none">
+                            <option value="">Selecciona Departamento...</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold mb-1 opacity-80">Ciudad / Municipio</label>
+                        <select id="edit-client-city" class="w-full px-3 py-2 theme-input border rounded-xl text-xs outline-none">
+                            <option value="">Selecciona Ciudad...</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold mb-1 opacity-80">Estado de Compra *</label>
+                        <select id="edit-client-purchase-status" onchange="toggleEditPurchaseOptions()" required class="w-full px-3 py-2 theme-input border rounded-xl text-xs outline-none">
+                            <option value="No compró">1. No compró</option>
+                            <option value="Compró">2. Compró</option>
+                            <option value="Quedó de venir">3. Quedó de venir</option>
+                            <option value="No responde">4. No responde</option>
+                        </select>
+                    </div>
+
+                    <div id="edit-finance-field-container" class="hidden">
+                        <label class="block text-xs font-semibold mb-1 text-emerald-400">Por dónde fue la venta *</label>
+                        <select id="edit-client-finance-platform" class="w-full px-3 py-2 theme-input border border-emerald-500/50 rounded-xl text-xs outline-none text-emerald-300 font-bold">
+                            <option value="Krediya">Krediya</option>
+                            <option value="Payjoy">Payjoy</option>
+                            <option value="E-credit">E-credit</option>
+                            <option value="Con cupo">Con cupo</option>
+                            <option value="De contado">De contado</option>
+                        </select>
+                    </div>
+
+                    <div id="edit-visit-date-container" class="hidden">
+                        <label class="block text-xs font-semibold mb-1 text-cyan-400">Fecha acordada de visita *</label>
+                        <input type="date" id="edit-client-visit-date" class="w-full px-3 py-2 theme-input border border-cyan-500/50 rounded-xl text-xs outline-none text-cyan-300 font-bold">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold mb-1 opacity-80">Observaciones *</label>
+                    <textarea id="edit-client-notes" required rows="3" class="w-full px-3 py-2 theme-input border rounded-xl text-xs outline-none"></textarea>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-3 border-t border-slate-800">
+                    <button type="button" onclick="closeEditModal()" class="px-4 py-2 theme-input border rounded-xl text-xs">Cancelar</button>
+                    <button type="submit" class="px-6 py-2 bg-cyan-500 text-black font-bold rounded-xl text-xs">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- MODAL DE PERSONALIZACIÓN -->
     <div id="custom-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
         <div class="w-full max-w-md theme-card border rounded-2xl p-6 shadow-2xl space-y-5">
@@ -582,7 +637,6 @@
     </div>
 
     <script>
-        // Configuración de Firebase Cloud
         const firebaseConfig = {
             apiKey: "AIzaSyBHKKt46qEYAxy6J6x1lGarIFd-7sXXOE",
             authDomain: "loantechclientes.firebaseapp.com",
@@ -600,13 +654,76 @@
         let clients = [];
         let currentUser = null;
 
+        // BASE DE DATOS COMPLETA DE COLOMBIA (32 DEPARTAMENTOS Y MUNICIPIOS)
+        const colombiaData = {
+            "Valle del Cauca": ["Cali", "Palmira", "Jamundí", "Yumbo", "Tuluá", "Buga", "Cartago", "Buenaventura", "Candelaria", "Florida", "Pradera", "Zarzal", "Sevilla", "Roldanillo"],
+            "Bogotá D.C.": ["Bogotá D.C."],
+            "Antioquia": ["Medellín", "Bello", "Itagüí", "Envigado", "Rionegro", "Apartadó", "Turbo", "Caucasia", "Sabaneta", "Caldas"],
+            "Atlántico": ["Barranquilla", "Soledad", "Malambo", "Sabanalarga", "Baranoa", "Puerto Colombia"],
+            "Bolívar": ["Cartagena", "Magangué", "Turbaco", "Arjona", "Carmen de Bolívar"],
+            "Boyacá": ["Tunja", "Sogamoso", "Duitama", "Chiquinquirá", "Puerto Boyacá"],
+            "Caldas": ["Manizales", "La Dorada", "Riosucio", "Villamaría", "Pensilvania"],
+            "Caquetá": ["Florencia", "San Vicente del Caguán"],
+            "Cauca": ["Popayán", "Santander de Quilichao", "Puerto Tejada", "Patía"],
+            "Cesar": ["Valledupar", "Aguachica", "Agustín Codazzi", "Bosconia"],
+            "Córdoba": ["Montería", "Cereté", "Sahagún", "Lorica", "Montelíbano"],
+            "Cundinamarca": ["Soacha", "Chía", "Zipaquirá", "Facatativá", "Girardot", "Fusagasugá", "Mosquera", "Madrid", "Funza"],
+            "Chocó": ["Quibdó", "Istmina"],
+            "Huila": ["Neiva", "Pitalito", "Garzón", "La Plata"],
+            "La Guajira": ["Riohacha", "Maicao", "Uribia", "Fonseca"],
+            "Magdalena": ["Santa Marta", "Ciénaga", "Fundación", "El Banco"],
+            "Meta": ["Villavicencio", "Acacías", "Granada", "Puerto López"],
+            "Nariño": ["Pasto", "Tumaco", "Ipiales"],
+            "Norte de Santander": ["Cúcuta", "Ocaña", "Villa del Rosario", "Los Patios", "Pamplona"],
+            "Quindío": ["Armenia", "Calarcá", "La Tebaida", "Montenegro", "Quimbaya"],
+            "Risaralda": ["Pereira", "Dosquebradas", "Santa Rosa de Cabal"],
+            "Santander": ["Bucaramanga", "Floridablanca", "Girón", "Piedecuesta", "Barrancabermeja"],
+            "Sucre": ["Sincelejo", "Corozal", "San Marcos"],
+            "Tolima": ["Ibagué", "Espinal", "Melgar", "Honda"],
+            "Arauca": ["Arauca", "Tame", "Saravena"],
+            "Casanare": ["Yopal", "Aguazul", "Paz de Ariporo"],
+            "Putumayo": ["Mocoa", "Puerto Asís"],
+            "San Andrés y Providencia": ["San Andrés"],
+            "Amazonas": ["Leticia"],
+            "Guaainía": ["Inírida"],
+            "Guaviare": ["San José del Guaviare"],
+            "Vaupés": ["Mitú"],
+            "Vichada": ["Puerto Carreño"]
+        };
+
+        function populateDepartmentDropdowns() {
+            const deps = Object.keys(colombiaData).sort();
+            const selects = ['client-department', 'edit-client-department'];
+
+            selects.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.innerHTML = '<option value="">Selecciona Departamento...</option>';
+                deps.forEach(d => {
+                    el.innerHTML += `<option value="${d}">${d}</option>`;
+                });
+            });
+        }
+
+        function updateCityDropdown(deptSelectId, citySelectId, selectedCity = '') {
+            const deptVal = document.getElementById(deptSelectId).value;
+            const cityEl = document.getElementById(citySelectId);
+            cityEl.innerHTML = '<option value="">Selecciona Ciudad...</option>';
+
+            if (deptVal && colombiaData[deptVal]) {
+                colombiaData[deptVal].forEach(c => {
+                    const isSelected = c === selectedCity ? 'selected' : '';
+                    cityEl.innerHTML += `<option value="${c}" ${isSelected}>${c}</option>`;
+                });
+            }
+        }
+
         const defaultUsers = [
             { username: 'jean', pass: '172305', role: 'Administrador', avatar: 'fa-robot' },
             { username: 'asesor1', pass: '1234', role: 'Asesor', avatar: 'fa-user-tie' },
             { username: 'marketing1', pass: '1234', role: 'Marketing', avatar: 'fa-user-astronaut' }
         ];
 
-        // Sincronizar datos en tiempo real desde Firebase Cloud
         db.ref('users').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
@@ -662,6 +779,8 @@
             document.getElementById('current-user-role').innerText = currentUser.role;
             updateAvatarIcon(currentUser.avatar);
 
+            populateDepartmentDropdowns();
+
             const navRegister = document.getElementById('nav-register');
             const navAdmin = document.getElementById('nav-admin');
 
@@ -703,18 +822,49 @@
             if (activeBtn) activeBtn.classList.add('bg-cyan-500', 'text-black');
         }
 
-        function toggleFinanceField() {
+        function togglePurchaseOptions() {
             const status = document.getElementById('client-purchase-status').value;
-            const container = document.getElementById('finance-field-container');
-            const select = document.getElementById('client-finance-platform');
+            const financeContainer = document.getElementById('finance-field-container');
+            const financeSelect = document.getElementById('client-finance-platform');
+            const visitContainer = document.getElementById('visit-date-container');
+            const visitInput = document.getElementById('client-visit-date');
 
-            if (status === 'Compró' || status === 'Ya compró') {
-                container.classList.remove('hidden');
-                select.required = true;
+            if (status === 'Compró') {
+                financeContainer.classList.remove('hidden');
+                financeSelect.required = true;
+                visitContainer.classList.add('hidden');
+                visitInput.required = false;
+                visitInput.value = '';
+            } else if (status === 'Quedó de venir') {
+                visitContainer.classList.remove('hidden');
+                visitInput.required = true;
+                financeContainer.classList.add('hidden');
+                financeSelect.required = false;
+                financeSelect.value = '';
             } else {
-                container.classList.add('hidden');
-                select.required = false;
-                select.value = '';
+                financeContainer.classList.add('hidden');
+                financeSelect.required = false;
+                financeSelect.value = '';
+                visitContainer.classList.add('hidden');
+                visitInput.required = false;
+                visitInput.value = '';
+            }
+        }
+
+        function toggleEditPurchaseOptions() {
+            const status = document.getElementById('edit-client-purchase-status').value;
+            const financeContainer = document.getElementById('edit-finance-field-container');
+            const visitContainer = document.getElementById('edit-visit-date-container');
+
+            if (status === 'Compró') {
+                financeContainer.classList.remove('hidden');
+                visitContainer.classList.add('hidden');
+            } else if (status === 'Quedó de venir') {
+                visitContainer.classList.remove('hidden');
+                financeContainer.classList.add('hidden');
+            } else {
+                financeContainer.classList.add('hidden');
+                visitContainer.classList.add('hidden');
             }
         }
 
@@ -723,15 +873,19 @@
             const purchaseStatus = document.getElementById('client-purchase-status').value;
             const clientId = Date.now().toString();
 
+            let rawWhatsapp = document.getElementById('client-whatsapp').value;
+            let cleanWhatsapp = rawWhatsapp.replace(/\D/g, '');
+
             const newClient = {
                 id: clientId,
                 name: document.getElementById('client-name').value || 'Sin Nombre',
                 doc: document.getElementById('client-doc').value || 'N/A',
-                whatsapp: document.getElementById('client-whatsapp').value,
-                city: document.getElementById('client-city').value,
+                whatsapp: cleanWhatsapp,
+                department: document.getElementById('client-department').value || 'N/A',
+                city: document.getElementById('client-city').value || 'N/A',
                 purchaseStatus: purchaseStatus,
-                financePlatform: (purchaseStatus === 'Compró' || purchaseStatus === 'Ya compró') ? document.getElementById('client-finance-platform').value : 'N/A',
-                commitmentStatus: document.getElementById('client-commitment-status').value || 'Sin especificar',
+                financePlatform: purchaseStatus === 'Compró' ? document.getElementById('client-finance-platform').value : 'N/A',
+                visitDate: purchaseStatus === 'Quedó de venir' ? document.getElementById('client-visit-date').value : 'N/A',
                 notes: document.getElementById('client-notes').value,
                 asesor: currentUser.username,
                 warmedUp: false,
@@ -741,7 +895,7 @@
 
             db.ref('clients/' + clientId).set(newClient).then(() => {
                 document.getElementById('client-form').reset();
-                toggleFinanceField();
+                togglePurchaseOptions();
                 alert('¡Cliente guardado en la nube exitosamente!');
                 switchTab('clients');
             });
@@ -760,7 +914,12 @@
             }
 
             const search = document.getElementById('search-clients').value.toLowerCase();
-            const filtered = visible.filter(c => c.name.toLowerCase().includes(search) || c.whatsapp.includes(search) || c.city.toLowerCase().includes(search));
+            const filtered = visible.filter(c => 
+                (c.name && c.name.toLowerCase().includes(search)) || 
+                (c.whatsapp && c.whatsapp.includes(search)) || 
+                (c.city && c.city.toLowerCase().includes(search)) ||
+                (c.department && c.department.toLowerCase().includes(search))
+            );
 
             if (filtered.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-500">No hay clientes registrados.</td></tr>`;
@@ -768,25 +927,82 @@
             }
 
             filtered.forEach(c => {
-                const isBought = c.purchaseStatus === 'Compró' || c.purchaseStatus === 'Ya compró';
+                const isBought = c.purchaseStatus === 'Compró';
+                let extraInfo = 'N/A';
+                if (c.purchaseStatus === 'Compró') extraInfo = c.financePlatform || 'N/A';
+                if (c.purchaseStatus === 'Quedó de venir') extraInfo = `📅 ${c.visitDate || 'Sin fecha'}`;
+
                 tbody.innerHTML += `
                     <tr class="hover:bg-black/20 transition">
                         <td class="py-3 px-4">${c.date}</td>
                         <td class="py-3 px-4 font-bold">${c.name}<br><span class="text-[10px] text-slate-400 font-normal">CC: ${c.doc}</span></td>
                         <td class="py-3 px-4 text-emerald-400 font-semibold"><i class="fa-brands fa-whatsapp"></i> ${c.whatsapp}</td>
-                        <td class="py-3 px-4">${c.city}</td>
+                        <td class="py-3 px-4">${c.city !== 'N/A' ? c.city + ' (' + c.department + ')' : 'Sin especificar'}</td>
                         <td class="py-3 px-4">
                             <span class="px-2 py-0.5 rounded text-[10px] font-bold ${isBought ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'}">
                                 ${c.purchaseStatus}
                             </span>
                         </td>
-                        <td class="py-3 px-4 font-semibold text-emerald-300">${c.financePlatform || 'N/A'}</td>
+                        <td class="py-3 px-4 font-semibold text-cyan-300">${extraInfo}</td>
                         <td class="py-3 px-4 font-mono text-cyan-300">@${c.asesor}</td>
                         <td class="py-3 px-4 text-center">
-                            ${(currentUser?.role === 'Administrador' || c.asesor === currentUser?.username) ? `<button onclick="deleteClient('${c.id}')" class="text-rose-400 hover:text-rose-300 p-1"><i class="fa-solid fa-trash"></i></button>` : ''}
+                            <div class="flex items-center justify-center gap-2">
+                                <button onclick="openEditModal('${c.id}')" title="Editar Cliente" class="text-cyan-400 hover:text-cyan-300 p-1"><i class="fa-solid fa-pen-to-square"></i></button>
+                                ${(currentUser?.role === 'Administrador' || c.asesor === currentUser?.username) ? `<button onclick="deleteClient('${c.id}')" title="Eliminar Cliente" class="text-rose-400 hover:text-rose-300 p-1"><i class="fa-solid fa-trash"></i></button>` : ''}
+                            </div>
                         </td>
                     </tr>
                 `;
+            });
+        }
+
+        // EDITAR CLIENTE (MODAL Y LOGICA)
+        function openEditModal(clientId) {
+            const client = clients.find(c => c.id === clientId);
+            if (!client) return;
+
+            document.getElementById('edit-client-id').value = client.id;
+            document.getElementById('edit-client-name').value = client.name || '';
+            document.getElementById('edit-client-doc').value = client.doc || '';
+            document.getElementById('edit-client-whatsapp').value = client.whatsapp || '';
+            
+            document.getElementById('edit-client-department').value = client.department || '';
+            updateCityDropdown('edit-client-department', 'edit-client-city', client.city);
+
+            document.getElementById('edit-client-purchase-status').value = client.purchaseStatus || 'No compró';
+            document.getElementById('edit-client-finance-platform').value = client.financePlatform || 'Krediya';
+            document.getElementById('edit-client-visit-date').value = client.visitDate || '';
+            document.getElementById('edit-client-notes').value = client.notes || '';
+
+            toggleEditPurchaseOptions();
+            document.getElementById('edit-client-modal').classList.remove('hidden');
+        }
+
+        function closeEditModal() {
+            document.getElementById('edit-client-modal').classList.add('hidden');
+        }
+
+        function handleEditClientSubmit(event) {
+            event.preventDefault();
+            const id = document.getElementById('edit-client-id').value;
+            const purchaseStatus = document.getElementById('edit-client-purchase-status').value;
+            let rawWhatsapp = document.getElementById('edit-client-whatsapp').value;
+
+            const updatedData = {
+                name: document.getElementById('edit-client-name').value || 'Sin Nombre',
+                doc: document.getElementById('edit-client-doc').value || 'N/A',
+                whatsapp: rawWhatsapp.replace(/\D/g, ''),
+                department: document.getElementById('edit-client-department').value || 'N/A',
+                city: document.getElementById('edit-client-city').value || 'N/A',
+                purchaseStatus: purchaseStatus,
+                financePlatform: purchaseStatus === 'Compró' ? document.getElementById('edit-client-finance-platform').value : 'N/A',
+                visitDate: purchaseStatus === 'Quedó de venir' ? document.getElementById('edit-client-visit-date').value : 'N/A',
+                notes: document.getElementById('edit-client-notes').value
+            };
+
+            db.ref('clients/' + id).update(updatedData).then(() => {
+                alert('¡Cliente actualizado exitosamente!');
+                closeEditModal();
             });
         }
 
@@ -804,7 +1020,8 @@
                 visible = clients.filter(c => c.asesor === currentUser.username);
             }
 
-            const warmupList = visible.filter(c => c.purchaseStatus !== 'Compró' && c.purchaseStatus !== 'Ya compró');
+            // SOLO RECALENTAR PROSPECTOS CON ESTADO: No compró, Quedó de venir, No responde
+            const warmupList = visible.filter(c => c.purchaseStatus !== 'Compró');
 
             if (warmupList.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-slate-500">¡Sin prospectos pendientes por recalentar!</td></tr>`;
@@ -816,12 +1033,15 @@
 
             warmupList.forEach(c => {
                 const encodedMsg = encodeURIComponent(messageText);
+                let extraStatus = c.purchaseStatus;
+                if (c.purchaseStatus === 'Quedó de venir') extraStatus += `<br><span class="text-[10px] text-cyan-300 font-normal">📅 Visita: ${c.visitDate || 'Sin fecha'}</span>`;
+
                 tbody.innerHTML += `
                     <tr class="hover:bg-black/20 transition">
                         <td class="py-3 px-4 font-bold">${c.name}</td>
                         <td class="py-3 px-4 text-emerald-400 font-semibold">${c.whatsapp}</td>
-                        <td class="py-3 px-4">${c.city}</td>
-                        <td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-[10px] bg-amber-500/20 text-amber-300">${c.purchaseStatus}</span></td>
+                        <td class="py-3 px-4">${c.city !== 'N/A' ? c.city : 'N/A'}</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-[10px] bg-amber-500/20 text-amber-300 font-bold">${extraStatus}</span></td>
                         <td class="py-3 px-4">
                             ${c.warmedUp 
                                 ? `<span class="text-emerald-400 font-bold text-[10px]"><i class="fa-solid fa-check-double"></i> Recalentado (${c.warmedUpAt})</span>` 
@@ -859,8 +1079,8 @@
                 filteredClients = clients.filter(c => c.asesor === filterVal);
             }
 
-            const sales = filteredClients.filter(c => c.purchaseStatus === 'Compró' || c.purchaseStatus === 'Ya compró');
-            const pendingWarmup = filteredClients.filter(c => c.purchaseStatus !== 'Compró' && c.purchaseStatus !== 'Ya compró' && !c.warmedUp);
+            const sales = filteredClients.filter(c => c.purchaseStatus === 'Compró');
+            const pendingWarmup = filteredClients.filter(c => c.purchaseStatus !== 'Compró' && !c.warmedUp);
 
             document.getElementById('mkt-total-sales').innerText = sales.length;
             document.getElementById('mkt-pending-warmup').innerText = pendingWarmup.length;
@@ -869,7 +1089,7 @@
             rankingDiv.innerHTML = '';
 
             advisors.forEach(a => {
-                const count = clients.filter(c => c.asesor === a && (c.purchaseStatus === 'Compró' || c.purchaseStatus === 'Ya compró')).length;
+                const count = clients.filter(c => c.asesor === a && c.purchaseStatus === 'Compró').length;
                 rankingDiv.innerHTML += `
                     <div class="theme-input p-4 rounded-xl border flex items-center justify-between">
                         <div>
@@ -884,7 +1104,7 @@
             const auditBody = document.getElementById('mkt-warmup-audit-body');
             auditBody.innerHTML = '';
 
-            const unWarmed = filteredClients.filter(c => c.purchaseStatus !== 'Compró' && c.purchaseStatus !== 'Ya compró');
+            const unWarmed = filteredClients.filter(c => c.purchaseStatus !== 'Compró');
             if (unWarmed.length === 0) {
                 auditBody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-slate-500">Sin prospectos pendientes.</td></tr>`;
                 return;
