@@ -32,6 +32,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
     <style>
         :root {
             --bg-dark: #0b0f19;
@@ -577,14 +582,57 @@
     </div>
 
     <script>
-        let users = JSON.parse(localStorage.getItem('loantech_users')) || [
+        // Configuración de Firebase Cloud
+        const firebaseConfig = {
+            apiKey: "AIzaSyBHKKt46qEYAxy6J6x1lGarIFd-7sXXOE",
+            authDomain: "loantechclientes.firebaseapp.com",
+            databaseURL: "https://loantechclienten-default-rtdb.firebaseio.com", // Asegúrate que coincida con tu URL exacta de Realtime Database
+            projectId: "loantechclientes",
+            storageBucket: "loantechclientes.appspot.com",
+            messagingSenderId: "313515132903",
+            appId: "1:313515132903:web:64b5acbaefecdc43ed9f42"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        let users = [];
+        let clients = [];
+        let currentUser = null;
+
+        const defaultUsers = [
             { username: 'jean', pass: '172305', role: 'Administrador', avatar: 'fa-robot' },
             { username: 'asesor1', pass: '1234', role: 'Asesor', avatar: 'fa-user-tie' },
             { username: 'marketing1', pass: '1234', role: 'Marketing', avatar: 'fa-user-astronaut' }
         ];
 
-        let currentUser = null;
-        let clients = JSON.parse(localStorage.getItem('loantech_clients')) || [];
+        // Sincronizar datos en tiempo real desde Firebase Cloud
+        db.ref('users').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                users = Object.values(data);
+            } else {
+                // Si la base de datos está vacía, inicializamos con los usuarios por defecto
+                users = defaultUsers;
+                db.ref('users').set(defaultUsers);
+            }
+            if (currentUser) renderProfilesTable();
+            renderMarketingDashboard();
+        });
+
+        db.ref('clients').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                clients = Object.values(data);
+            } else {
+                clients = [];
+            }
+            if (currentUser) {
+                renderClientsTable();
+                renderWarmupTable();
+                renderMarketingDashboard();
+            }
+        });
 
         const aidaTemplates = {
             ATENCION: "🔥 ¡Hola! Te escribo de Loantech. Tenemos tu solicitud lista para aprobación inmediata de tu nuevo celular hoy mismo. ¿Te comparto los detalles?",
@@ -674,9 +722,10 @@
         function handleClientRegister(event) {
             event.preventDefault();
             const purchaseStatus = document.getElementById('client-purchase-status').value;
+            const clientId = Date.now().toString();
 
             const newClient = {
-                id: Date.now(),
+                id: clientId,
                 name: document.getElementById('client-name').value || 'Sin Nombre',
                 doc: document.getElementById('client-doc').value || 'N/A',
                 whatsapp: document.getElementById('client-whatsapp').value,
@@ -691,16 +740,13 @@
                 date: new Date().toISOString().split('T')[0]
             };
 
-            clients.push(newClient);
-            localStorage.setItem('loantech_clients', JSON.stringify(clients));
-            document.getElementById('client-form').reset();
-            toggleFinanceField();
-            alert('¡Cliente guardado exitosamente!');
-
-            switchTab('clients');
-            renderClientsTable();
-            renderWarmupTable();
-            renderMarketingDashboard();
+            // Guardar en Firebase Cloud
+            db.ref('clients/' + clientId).set(newClient).then(() => {
+                document.getElementById('client-form').reset();
+                toggleFinanceField();
+                alert('¡Cliente guardado en la nube exitosamente!');
+                switchTab('clients');
+            });
         }
 
         function renderClientsTable() {
@@ -739,7 +785,7 @@
                         <td class="py-3 px-4 font-semibold text-emerald-300">${c.financePlatform || 'N/A'}</td>
                         <td class="py-3 px-4 font-mono text-cyan-300">@${c.asesor}</td>
                         <td class="py-3 px-4 text-center">
-                            ${(currentUser?.role === 'Administrador' || c.asesor === currentUser?.username) ? `<button onclick="deleteClient(${c.id})" class="text-rose-400 hover:text-rose-300 p-1"><i class="fa-solid fa-trash"></i></button>` : ''}
+                            ${(currentUser?.role === 'Administrador' || c.asesor === currentUser?.username) ? `<button onclick="deleteClient('${c.id}')" class="text-rose-400 hover:text-rose-300 p-1"><i class="fa-solid fa-trash"></i></button>` : ''}
                         </td>
                     </tr>
                 `;
@@ -784,7 +830,7 @@
                                 : `<span class="text-amber-400 font-bold text-[10px]"><i class="fa-solid fa-clock"></i> Pendiente</span>`}
                         </td>
                         <td class="py-3 px-4 text-center">
-                            <a href="https://wa.me/${c.whatsapp}?text=${encodedMsg}" target="_blank" onclick="markAsWarmedUp(${c.id})" class="px-3 py-1.5 rounded-xl bg-emerald-500 text-black font-bold text-[11px] inline-flex items-center gap-1.5 hover:opacity-90 transition">
+                            <a href="https://wa.me/${c.whatsapp}?text=${encodedMsg}" target="_blank" onclick="markAsWarmedUp('${c.id}')" class="px-3 py-1.5 rounded-xl bg-emerald-500 text-black font-bold text-[11px] inline-flex items-center gap-1.5 hover:opacity-90 transition">
                                 <i class="fa-brands fa-whatsapp"></i> Enviar & Marcar Recalentado
                             </a>
                         </td>
@@ -794,16 +840,10 @@
         }
 
         function markAsWarmedUp(clientId) {
-            const client = clients.find(c => c.id === clientId);
-            if (client) {
-                client.warmedUp = true;
-                client.warmedUpAt = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                localStorage.setItem('loantech_clients', JSON.stringify(clients));
-                setTimeout(() => {
-                    renderWarmupTable();
-                    renderMarketingDashboard();
-                }, 1000);
-            }
+            db.ref('clients/' + clientId).update({
+                warmedUp: true,
+                warmedUpAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            });
         }
 
         function renderMarketingDashboard() {
@@ -878,12 +918,17 @@
                 return;
             }
 
-            users.push({ username, pass, role, avatar });
-            localStorage.setItem('loantech_users', JSON.stringify(users));
-            alert('¡Perfil institucional creado exitosamente!');
-            event.target.reset();
-            renderProfilesTable();
-            renderMarketingDashboard();
+            const newUser = { username, pass, role, avatar };
+            users.push(newUser);
+            
+            // Guardar usuarios actualizados en la nube
+            const usersObj = {};
+            users.forEach((u, index) => { usersObj[index] = u; });
+            db.ref('users').set(usersObj).then(() => {
+                alert('¡Perfil institucional creado en la nube exitosamente!');
+                event.target.reset();
+                renderProfilesTable();
+            });
         }
 
         function selectNewUserAvatar(btn, avatarIcon) {
@@ -896,7 +941,7 @@
             const tbody = document.getElementById('profiles-table-body');
             tbody.innerHTML = '';
 
-            users.forEach(u => {
+            users.forEach((u, index) => {
                 tbody.innerHTML += `
                     <tr class="hover:bg-black/20 transition">
                         <td class="py-2.5 px-3 font-bold">@${u.username}</td>
@@ -904,29 +949,31 @@
                         <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[10px] bg-purple-500/20 text-purple-300 font-semibold">${u.role}</span></td>
                         <td class="py-2.5 px-3 text-lg"><i class="fa-solid ${u.avatar} text-cyan-400"></i></td>
                         <td class="py-2.5 px-3 text-center">
-                            ${u.username !== 'jean' ? `<button onclick="deleteUser('${u.username}')" class="text-rose-400 hover:text-rose-300 p-1"><i class="fa-solid fa-trash"></i></button>` : '<span class="text-[10px] text-slate-500">Principal</span>'}
+                            ${u.username !== 'jean' ? `<button onclick="deleteUser(${index})" class="text-rose-400 hover:text-rose-300 p-1"><i class="fa-solid fa-trash"></i></button>` : '<span class="text-[10px] text-slate-500">Principal</span>'}
                         </td>
                     </tr>
                 `;
             });
         }
 
-        function deleteUser(username) {
-            if (confirm(`¿Estás seguro de eliminar al usuario @${username}?`)) {
-                users = users.filter(u => u.username !== username);
-                localStorage.setItem('loantech_users', JSON.stringify(users));
-                renderProfilesTable();
-                renderMarketingDashboard();
+        function deleteUser(index) {
+            if (confirm(`¿Estás seguro de eliminar este usuario?`)) {
+                users.splice(index, 1);
+                const usersObj = {};
+                users.forEach((u, i) => { usersObj[i] = u; });
+                db.ref('users').set(usersObj).then(() => {
+                    renderProfilesTable();
+                });
             }
         }
 
-        function deleteClient(id) {
+        function deleteClient(clientId) {
             if (confirm('¿Estás seguro de eliminar este registro de cliente?')) {
-                clients = clients.filter(c => c.id !== id);
-                localStorage.setItem('loantech_clients', JSON.stringify(clients));
-                renderClientsTable();
-                renderWarmupTable();
-                renderMarketingDashboard();
+                db.ref('clients/' + clientId).remove().then(() => {
+                    renderClientsTable();
+                    renderWarmupTable();
+                    renderMarketingDashboard();
+                });
             }
         }
 
@@ -948,8 +995,12 @@
             if (currentUser) {
                 currentUser.avatar = avatarIcon;
                 const userObj = users.find(u => u.username === currentUser.username);
-                if (userObj) userObj.avatar = avatarIcon;
-                localStorage.setItem('loantech_users', JSON.stringify(users));
+                if (userObj) {
+                    userObj.avatar = avatarIcon;
+                    const usersObj = {};
+                    users.forEach((u, i) => { usersObj[i] = u; });
+                    db.ref('users').set(usersObj);
+                }
                 updateAvatarIcon(avatarIcon);
             }
         }
