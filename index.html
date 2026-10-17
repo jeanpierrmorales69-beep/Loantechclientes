@@ -42,20 +42,100 @@
             --border-color: #1e293b;
             --accent-glow: rgba(0, 242, 254, 0.25);
         }
+
+        body.theme-cyberpunk {
+            --bg-dark: #0b0f19;
+            --bg-card: #151c2e;
+            --bg-input: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --accent-glow: rgba(0, 242, 254, 0.25);
+        }
+
+        body.theme-midnight {
+            --bg-dark: #070e17;
+            --bg-card: #0f1d30;
+            --bg-input: #1b2d47;
+            --text-main: #f1f5f9;
+            --text-muted: #64748b;
+            --border-color: #1e3a8a;
+            --accent-glow: rgba(59, 130, 246, 0.3);
+        }
+
+        body.theme-emerald {
+            --bg-dark: #04140e;
+            --bg-card: #0a291e;
+            --bg-input: #123d2e;
+            --text-main: #ecfdf5;
+            --text-muted: #6ee7b7;
+            --border-color: #065f46;
+            --accent-glow: rgba(16, 185, 129, 0.3);
+        }
+
+        body.theme-sunset {
+            --bg-dark: #190a14;
+            --bg-card: #2d1024;
+            --bg-input: #421836;
+            --text-main: #fff1f2;
+            --text-muted: #fda4af;
+            --border-color: #831843;
+            --accent-glow: rgba(244, 63, 94, 0.3);
+        }
+
+        body.theme-light {
+            --bg-dark: #f1f5f9;
+            --bg-card: #ffffff;
+            --bg-input: #f8fafc;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --accent-glow: rgba(14, 165, 233, 0.2);
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-main);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
-        .theme-card { background-color: var(--bg-card); border-color: var(--border-color); }
-        .theme-input { background-color: var(--bg-input); border-color: var(--border-color); color: var(--text-main); }
-        .glow-effect { box-shadow: 0 0 25px -5px var(--accent-glow); }
+
+        .theme-card {
+            background-color: var(--bg-card);
+            border-color: var(--border-color);
+        }
+
+        .theme-input {
+            background-color: var(--bg-input);
+            border-color: var(--border-color);
+            color: var(--text-main);
+        }
+
+        .glow-effect {
+            box-shadow: 0 0 25px -5px var(--accent-glow);
+        }
+
         .gradient-text {
             background: linear-gradient(135deg, #00f2fe 0%, #4facfe 50%, #7f00ff 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .gradient-bg { background: linear-gradient(135deg, #00f2fe 0%, #7f00ff 100%); }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #00f2fe 0%, #7f00ff 100%);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--bg-input);
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body class="theme-cyberpunk min-h-screen flex flex-col justify-between selection:bg-cyan-500 selection:text-black">
@@ -65,6 +145,9 @@
         <!-- ================= LOGIN SCREEN ================= -->
         <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4">
             <div class="w-full max-w-md p-8 theme-card rounded-2xl border glow-effect relative overflow-hidden shadow-2xl">
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-cyan-500 rounded-full filter blur-3xl opacity-20"></div>
+                <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-purple-600 rounded-full filter blur-3xl opacity-20"></div>
+
                 <div class="text-center mb-6 relative z-10">
                     <div class="flex justify-center items-center gap-2 mb-2">
                         <div class="w-12 h-12 flex items-center justify-center rounded-xl gradient-bg shadow-lg shadow-cyan-500/30">
@@ -73,7 +156,7 @@
                         <span class="text-3xl font-extrabold tracking-tight">Loan<span class="gradient-text">tech</span></span>
                     </div>
                     <p class="text-xs font-semibold tracking-widest text-cyan-400 uppercase">CREEMOS EN TI!</p>
-                    <p class="text-xs text-slate-400 mt-2">Ingresa tus credenciales asignadas</p>
+                    <p class="text-xs text-slate-400 mt-2">Ingresa con tus credenciales institucionales</p>
                 </div>
 
                 <div id="login-alert" class="hidden mb-4 p-3 rounded-xl text-xs font-medium text-center bg-rose-500/20 text-rose-300 border border-rose-500/30"></div>
@@ -81,171 +164,421 @@
                 <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4 relative z-10">
                     <div>
                         <label class="block text-xs font-semibold uppercase tracking-wider mb-1 opacity-80">Usuario</label>
-                        <input type="text" id="login-username" required placeholder="Tu usuario" class="w-full px-4 py-2.5 theme-input border rounded-xl outline-none text-sm">
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><i class="fa-solid fa-user"></i></span>
+                            <input type="text" id="login-username" required placeholder="Tu nombre de usuario" class="w-full pl-9 pr-4 py-2.5 theme-input border rounded-xl outline-none text-sm transition">
+                        </div>
                     </div>
                     <div>
                         <label class="block text-xs font-semibold uppercase tracking-wider mb-1 opacity-80">Contraseña</label>
-                        <input type="password" id="login-password" required placeholder="••••••••" class="w-full px-4 py-2.5 theme-input border rounded-xl outline-none text-sm">
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><i class="fa-solid fa-lock"></i></span>
+                            <input type="password" id="login-password" required placeholder="••••••••" class="w-full pl-9 pr-4 py-2.5 theme-input border rounded-xl outline-none text-sm transition">
+                        </div>
                     </div>
-                    <button type="submit" class="w-full py-3 px-4 rounded-xl font-bold text-black gradient-bg hover:opacity-90 transition shadow-lg shadow-cyan-500/20">
-                        INICIAR SESIÓN
+                    <button type="submit" class="w-full py-3 px-4 rounded-xl font-bold text-black gradient-bg hover:opacity-90 transition shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-2">
+                        <span>INGRESAR</span>
+                        <i class="fa-solid fa-arrow-right"></i>
                     </button>
                 </form>
-                <div class="mt-4 text-center text-[11px] text-slate-500">
-                    <p>Admin principal: <b>jean</b> / <b>172305</b></p>
+
+                <div class="mt-6 pt-4 border-t border-slate-800 text-center text-[11px] text-slate-500">
+                    <p>Administrador: <span class="font-mono text-cyan-400">jean</span> (Clave: <span class="font-mono text-cyan-400">172305</span>)</p>
                 </div>
             </div>
         </div>
 
         <!-- ================= MAIN DASHBOARD ================= -->
         <div id="main-content" class="hidden flex-1 flex flex-col">
-            <header class="theme-card border-b sticky top-0 z-40">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20">
-                    <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('register')">
-                        <div class="w-10 h-10 flex items-center justify-center rounded-xl gradient-bg shadow-md">
-                            <i class="fa-solid fa-mobile-screen-button text-xl text-black"></i>
-                        </div>
-                        <div>
-                            <span class="text-2xl font-black tracking-tight">Loan<span class="gradient-text">tech</span></span>
-                            <span class="block text-[10px] font-bold text-cyan-400 tracking-wider uppercase -mt-1">CREEMOS EN TI!</span>
-                        </div>
-                    </div>
 
-                    <nav class="hidden md:flex items-center space-x-1 p-1.5 rounded-2xl theme-input border">
-                        <button onclick="switchTab('register')" id="nav-register" class="nav-btn px-4 py-2 rounded-xl text-xs font-semibold bg-cyan-500 text-black">Registrar Cliente</button>
-                        <button onclick="switchTab('clients')" id="nav-clients" class="nav-btn px-4 py-2 rounded-xl text-xs font-semibold opacity-70">Lista de Clientes</button>
-                        <button onclick="switchTab('warmup')" id="nav-warmup" class="nav-btn px-4 py-2 rounded-xl text-xs font-semibold opacity-70">Recalentar</button>
-                        <button onclick="switchTab('marketing')" id="nav-marketing" class="nav-btn px-4 py-2 rounded-xl text-xs font-semibold opacity-70 text-emerald-400">Marketing</button>
-                        <button id="nav-admin" onclick="switchTab('admin')" class="nav-btn px-4 py-2 rounded-xl text-xs font-semibold text-purple-300 border border-purple-500/30">Configuración</button>
-                    </nav>
-
-                    <div class="flex items-center gap-3">
-                        <div class="flex items-center gap-3 theme-input px-3 py-1.5 rounded-2xl border">
-                            <div id="user-avatar-display" class="w-9 h-9 rounded-xl flex items-center justify-center text-lg border border-cyan-500/40 bg-black/20">
-                                <i class="fa-solid fa-robot text-cyan-400"></i>
+            <!-- NAVBAR -->
+            <header class="theme-card border-b sticky top-0 z-40 backdrop-blur-md">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex items-center justify-between h-20">
+                        
+                        <!-- Logo -->
+                        <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('register')">
+                            <div class="w-10 h-10 flex items-center justify-center rounded-xl gradient-bg shadow-md">
+                                <i class="fa-solid fa-mobile-screen-button text-xl text-black"></i>
                             </div>
-                            <div class="hidden sm:block text-left">
-                                <span id="current-user-name" class="block text-xs font-bold capitalize leading-tight">Usuario</span>
-                                <span id="current-user-role" class="block text-[10px] text-cyan-400 font-medium">Asesor</span>
+                            <div>
+                                <span class="text-2xl font-black tracking-tight">Loan<span class="gradient-text">tech</span></span>
+                                <span class="block text-[10px] font-bold text-cyan-400 tracking-wider uppercase -mt-1">CREEMOS EN TI!</span>
                             </div>
                         </div>
-                        <button onclick="logout()" class="p-2.5 rounded-xl theme-input border text-xs hover:text-rose-400"><i class="fa-solid fa-right-from-bracket"></i></button>
+
+                        <!-- Navigation Tabs -->
+                        <nav class="hidden md:flex items-center space-x-1 p-1.5 rounded-2xl theme-input border">
+                            <button onclick="switchTab('register')" id="nav-register" class="nav-btn px-4 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-2">
+                                <i class="fa-solid fa-user-plus"></i> Registrar Cliente
+                            </button>
+                            <button onclick="switchTab('clients')" id="nav-clients" class="nav-btn px-4 py-2 rounded-xl text-xs font-semibold opacity-70 hover:opacity-100 transition flex items-center gap-2">
+                                <i class="fa-solid fa-users"></i> Lista de Clientes
+                            </button>
+                            <button onclick="switchTab('warmup')" id="nav-warmup" class="nav-btn px-4 py-2 rounded-xl text-xs font-semibold opacity-70 hover:opacity-100 transition flex items-center gap-2">
+                                <i class="fa-solid fa-fire text-amber-400"></i> Recalentar
+                            </button>
+                            <button onclick="switchTab('marketing')" id="nav-marketing" class="nav-btn px-4 py-2 rounded-xl text-xs font-semibold opacity-70 hover:opacity-100 transition flex items-center gap-2 text-emerald-400">
+                                <i class="fa-solid fa-chart-line"></i> Marketing
+                            </button>
+                            <button id="nav-admin" onclick="switchTab('admin')" class="nav-btn px-4 py-2 rounded-xl text-xs font-semibold text-purple-300 hover:text-white transition flex items-center gap-2 border border-purple-500/30">
+                                <i class="fa-solid fa-shield-halved text-purple-400"></i> Configuración
+                            </button>
+                        </nav>
+
+                        <!-- Profile & Theme Settings Button -->
+                        <div class="flex items-center gap-3">
+                            <button onclick="openCustomizationModal()" class="flex items-center gap-3 theme-input px-3 py-1.5 rounded-2xl border hover:border-cyan-400 transition cursor-pointer" title="Cambiar Tema y Avatar">
+                                <div id="user-avatar-display" class="w-9 h-9 rounded-xl flex items-center justify-center text-lg border border-cyan-500/40 bg-black/30">
+                                    <i class="fa-solid fa-robot text-cyan-400"></i>
+                                </div>
+                                <div class="hidden sm:block text-left">
+                                    <span id="current-user-name" class="block text-xs font-bold capitalize leading-tight">Usuario</span>
+                                    <span id="current-user-role" class="block text-[10px] text-cyan-400 font-medium">Asesor</span>
+                                </div>
+                                <i class="fa-solid fa-sliders text-xs text-slate-400 ml-1"></i>
+                            </button>
+
+                            <button onclick="logout()" title="Cerrar Sesión" class="p-2.5 rounded-xl theme-input border hover:text-rose-400 transition">
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </header>
 
+            <!-- MAIN CONTAINER CONTENT -->
             <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full space-y-6">
-                
-                <!-- BANNER BIENVENIDA Y FRASE MOTIVADORA -->
+
+                <!-- MOTIVATIONAL BANNER -->
                 <div class="relative overflow-hidden rounded-2xl theme-card border p-6 glow-effect flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                     <div>
-                        <h1 class="text-2xl font-extrabold">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-[10px] font-bold mb-2">
+                            <span class="animate-pulse w-2 h-2 rounded-full bg-cyan-400"></span>
+                            PLATAFORMA OFICIAL LOANTECH
+                        </div>
+                        <h1 class="text-2xl sm:text-3xl font-extrabold">
                             BIENVENID@, <span id="welcome-user-name" class="gradient-text uppercase">USUARIO</span> 👋
                         </h1>
-                        <p class="text-xs opacity-70 mt-1">Plataforma oficial Loantech. Creemos en ti.</p>
+                        <p class="text-xs sm:text-sm opacity-70 mt-1 max-w-2xl">
+                            Aumenta tus ventas de telefonía móvil financiada y dale un seguimiento efectivo a tus prospectos. ¡Creemos en ti!
+                        </p>
                     </div>
-                    <div class="theme-input border p-3 rounded-xl flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm"><i class="fa-solid fa-lightbulb"></i></div>
+                    <div class="w-full md:w-auto theme-input border p-3.5 rounded-xl flex items-center gap-3 shrink-0">
+                        <div class="w-9 h-9 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-lightbulb"></i>
+                        </div>
                         <div>
-                            <span class="block text-[9px] font-bold uppercase text-amber-400">Frase Motivadora del Día</span>
-                            <p id="quote-display" class="text-xs italic opacity-90">"El éxito es la suma de pequeños esfuerzos repetidos día tras día."</p>
+                            <span class="block text-[10px] font-bold uppercase tracking-wider text-amber-400">Frase Motivadora del Día</span>
+                            <p id="quote-display" class="text-xs italic font-medium opacity-90">"El éxito es la suma de pequeños esfuerzos repetidos día tras día."</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- TAB 1: REGISTRAR -->
+                <!-- TAB 1: REGISTRAR CLIENTE (Asesor & Admin) -->
                 <section id="tab-register" class="tab-content space-y-6">
                     <div class="theme-card border rounded-2xl p-6 sm:p-8 shadow-xl">
-                        <h2 class="text-xl font-bold mb-4">Registrar Nuevo Cliente</h2>
-                        <form id="client-form" onsubmit="handleClientRegister(event)" class="space-y-4">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <input type="text" id="client-name" placeholder="Nombre del cliente" class="w-full px-4 py-2 theme-input border rounded-xl text-sm">
-                                <input type="text" id="client-whatsapp" required placeholder="WhatsApp obligatorio" class="w-full px-4 py-2 theme-input border rounded-xl text-sm">
-                                <select id="client-city" required class="w-full px-4 py-2 theme-input border rounded-xl text-sm">
-                                    <option value="" disabled selected>Selecciona municipio...</option>
-                                    <option value="Cali">Cali</option>
-                                    <option value="Palmira">Palmira</option>
-                                    <option value="Jamundí">Jamundí</option>
-                                </select>
-                                <select id="client-purchase-status" required class="w-full px-4 py-2 theme-input border rounded-xl text-sm">
-                                    <option value="" disabled selected>Estado de compra...</option>
-                                    <option value="Compró">Compró</option>
-                                    <option value="No compró">No compró</option>
-                                    <option value="Está pensándolo">Está pensándolo</option>
-                                </select>
+                        <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-800">
+                            <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-user-plus"></i>
                             </div>
-                            <textarea id="client-notes" required rows="2" placeholder="Observaciones..." class="w-full px-4 py-2 theme-input border rounded-xl text-sm"></textarea>
-                            <button type="submit" class="px-6 py-2.5 rounded-xl font-bold text-black gradient-bg text-sm">GUARDAR REGISTRO</button>
-                        </form>
-                    </div>
-                </section>
-
-                <!-- TAB 2: CLIENTES -->
-                <section id="tab-clients" class="tab-content hidden space-y-6">
-                    <div class="theme-card border rounded-2xl p-6 shadow-xl">
-                        <h2 class="text-xl font-bold mb-4">Lista de Clientes <span id="client-view-badge" class="text-xs px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300">Privada</span></h2>
-                        <table class="w-full text-left text-xs">
-                            <thead><tr class="border-b border-slate-800"><th class="py-2">Cliente</th><th class="py-2">WhatsApp</th><th class="py-2">Ciudad</th><th class="py-2">Estado</th><th class="py-2">Asesor</th></tr></thead>
-                            <tbody id="clients-table-body"></tbody>
-                        </table>
-                    </div>
-                </section>
-
-                <!-- TAB 3: WARMUP -->
-                <section id="tab-warmup" class="tab-content hidden space-y-6">
-                    <div class="theme-card border rounded-2xl p-6 shadow-xl">
-                        <h2 class="text-xl font-bold mb-4">Recalentar Prospectos</h2>
-                        <table class="w-full text-left text-xs">
-                            <thead><tr class="border-b border-slate-800"><th class="py-2">Cliente</th><th class="py-2">WhatsApp</th><th class="py-2 text-center">Acción</th></tr></thead>
-                            <tbody id="warmup-table-body"></tbody>
-                        </table>
-                    </div>
-                </section>
-
-                <!-- TAB 4: MARKETING -->
-                <section id="tab-marketing" class="tab-content hidden space-y-6">
-                    <div class="theme-card border border-emerald-500/30 rounded-2xl p-6 shadow-xl">
-                        <h2 class="text-xl font-bold text-emerald-400 mb-2">Panel de Marketing</h2>
-                        <p class="text-xs opacity-70">Sección de filtrado y campañas de pauta publicitaria.</p>
-                    </div>
-                </section>
-
-                <!-- TAB 5: CONFIGURACIÓN Y CREACIÓN DE PERFILES (SOLO ADMIN) -->
-                <section id="tab-admin" class="tab-content hidden space-y-6">
-                    <div class="theme-card border border-purple-500/30 rounded-2xl p-6 sm:p-8 shadow-xl space-y-6">
-                        <div>
-                            <h2 class="text-xl font-bold text-purple-400 mb-1"><i class="fa-solid fa-shield-halved"></i> Gestión de Perfiles y Accesos</h2>
-                            <p class="text-xs opacity-70">Crea asesores, administradores o personal de marketing y define sus avatares.</p>
+                            <div>
+                                <h2 class="text-xl font-bold">Registrar Nuevo Cliente</h2>
+                                <p class="text-xs opacity-70">Completa la información del prospecto para asignarlo a tu cartera.</p>
+                            </div>
                         </div>
 
-                        <!-- Formulario para crear perfiles -->
-                        <form onsubmit="handleCreateProfile(event)" class="theme-input p-4 rounded-xl border space-y-4">
-                            <h3 class="text-sm font-bold text-cyan-300">Crear Nuevo Usuario / Asesor</h3>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                <input type="text" id="new-user" required placeholder="Nombre de usuario" class="px-3 py-2 theme-card border rounded-lg text-xs">
-                                <input type="password" id="new-pass" required placeholder="Contraseña" class="px-3 py-2 theme-card border rounded-lg text-xs">
-                                <select id="new-role" class="px-3 py-2 theme-card border rounded-lg text-xs">
-                                    <option value="Asesor">Asesor (Solo ve su cartera)</option>
-                                    <option value="Administrador">Administrador (Control total)</option>
-                                    <option value="Marketing">Marketing (Campañas)</option>
+                        <form id="client-form" onsubmit="handleClientRegister(event)" class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-xs font-semibold mb-2 opacity-80">Nombre Completo <span class="text-slate-500 font-normal">(Opcional)</span></label>
+                                    <input type="text" id="client-name" placeholder="Ej. Carlos Pérez" class="w-full px-4 py-3 theme-input border rounded-xl outline-none focus:ring-2 focus:ring-cyan-400 text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold mb-2 opacity-80">Identificación CC / PPT <span class="text-slate-500 font-normal">(Opcional)</span></label>
+                                    <input type="text" id="client-doc" placeholder="Ej. 1005123456" class="w-full px-4 py-3 theme-input border rounded-xl outline-none focus:ring-2 focus:ring-cyan-400 text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold mb-2 opacity-80">Número de WhatsApp <span class="text-rose-400">* (Obligatorio)</span></label>
+                                    <div class="relative">
+                                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-emerald-400"><i class="fa-brands fa-whatsapp text-lg"></i></span>
+                                        <input type="text" id="client-whatsapp" required placeholder="Ej. 3151234567" class="w-full pl-10 pr-4 py-3 theme-input border rounded-xl outline-none focus:ring-2 focus:ring-cyan-400 text-sm">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold mb-2 opacity-80">Ciudad (Colombia) <span class="text-rose-400">* (Obligatorio)</span></label>
+                                    <select id="client-city" required class="w-full px-4 py-3 theme-input border rounded-xl outline-none focus:ring-2 focus:ring-cyan-400 text-sm">
+                                        <option value="" disabled selected>Selecciona una ciudad o municipio...</option>
+                                        <optgroup label="Valle del Cauca">
+                                            <option value="Cali">Cali</option>
+                                            <option value="Palmira">Palmira</option>
+                                            <option value="Jamundí">Jamundí</option>
+                                            <option value="Yumbo">Yumbo</option>
+                                            <option value="Tuluá">Tuluá</option>
+                                            <option value="Buga">Buga</option>
+                                            <option value="Cartago">Cartago</option>
+                                            <option value="Buenaventura">Buenaventura</option>
+                                        </optgroup>
+                                        <optgroup label="Principales Ciudades de Colombia">
+                                            <option value="Bogotá D.C.">Bogotá D.C.</option>
+                                            <option value="Medellín">Medellín</option>
+                                            <option value="Barranquilla">Barranquilla</option>
+                                            <option value="Bucaramanga">Bucaramanga</option>
+                                            <option value="Pereira">Pereira</option>
+                                            <option value="Manizales">Manizales</option>
+                                            <option value="Armenia">Armenia</option>
+                                            <option value="Cúcuta">Cúcuta</option>
+                                            <option value="Ibagué">Ibagué</option>
+                                            <option value="Santa Marta">Santa Marta</option>
+                                            <option value="Cartagena">Cartagena</option>
+                                            <option value="Villavicencio">Villavicencio</option>
+                                            <option value="Pasto">Pasto</option>
+                                            <option value="Popayán">Popayán</option>
+                                            <option value="Neiva">Neiva</option>
+                                            <option value="Montería">Montería</option>
+                                            <option value="Valledupar">Valledupar</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold mb-2 opacity-80">Estado de Compra <span class="text-rose-400">* (Obligatorio)</span></label>
+                                    <select id="client-purchase-status" onchange="toggleFinanceField()" required class="w-full px-4 py-3 theme-input border rounded-xl outline-none focus:ring-2 focus:ring-cyan-400 text-sm">
+                                        <option value="" disabled selected>Selecciona estado de compra...</option>
+                                        <option value="Compró">Compró</option>
+                                        <option value="No compró">No compró</option>
+                                        <option value="Está pensándolo">Está pensándolo</option>
+                                    </select>
+                                </div>
+
+                                <!-- CONDICIONAL SOLO SI COMPRÓ -->
+                                <div id="finance-field-container" class="hidden">
+                                    <label class="block text-xs font-semibold mb-2 text-emerald-400">Por dónde fue la venta <span class="text-rose-400">* (Obligatorio)</span></label>
+                                    <select id="client-finance-platform" class="w-full px-4 py-3 theme-input border-2 border-emerald-500/50 rounded-xl outline-none focus:ring-2 focus:ring-emerald-400 text-sm font-bold text-emerald-300">
+                                        <option value="" disabled selected>Selecciona medio/financiera...</option>
+                                        <option value="Krediya">Krediya</option>
+                                        <option value="Payjoy">Payjoy</option>
+                                        <option value="E-credit">E-credit</option>
+                                        <option value="Con cupo">Con cupo</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-semibold mb-2 opacity-80">Estado de Compromiso <span class="text-rose-400">* (Obligatorio)</span></label>
+                                    <select id="client-commitment-status" required class="w-full px-4 py-3 theme-input border rounded-xl outline-none focus:ring-2 focus:ring-cyan-400 text-sm">
+                                        <option value="" disabled selected>Selecciona proceso/compromiso...</option>
+                                        <option value="Quedó de venir">Quedó de venir</option>
+                                        <option value="Va a hacer el proceso">Va a hacer el proceso</option>
+                                        <option value="No quedó en nada">No quedó en nada</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold mb-2 opacity-80">Observaciones <span class="text-rose-400">* (Obligatorio)</span></label>
+                                <textarea id="client-notes" required rows="3" placeholder="Detalles del equipo de interés, dudas, inicial, etc..." class="w-full px-4 py-3 theme-input border rounded-xl outline-none focus:ring-2 focus:ring-cyan-400 text-sm"></textarea>
+                            </div>
+
+                            <div class="flex justify-end">
+                                <button type="submit" class="w-full sm:w-auto px-8 py-3.5 rounded-xl font-bold text-black gradient-bg hover:opacity-90 transition shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-floppy-disk"></i>
+                                    <span>GUARDAR CLIENTE</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- TAB 2: LISTA DE CLIENTES -->
+                <section id="tab-clients" class="tab-content hidden space-y-6">
+                    <div class="theme-card border rounded-2xl p-6 shadow-xl">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                            <div>
+                                <h2 class="text-xl font-bold flex items-center gap-2">
+                                    <i class="fa-solid fa-users text-cyan-400"></i> Historial de Clientes
+                                    <span id="client-view-badge" class="text-xs px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">Privada</span>
+                                </h2>
+                                <p class="text-xs opacity-70">Asesores ven su cartera privada. Administrador y Marketing supervisan datos globales.</p>
+                            </div>
+                            <input type="text" id="search-clients" oninput="renderClientsTable()" placeholder="Buscar cliente, WhatsApp o ciudad..." class="w-full sm:w-64 px-4 py-2 theme-input border rounded-xl text-xs outline-none focus:ring-2 focus:ring-cyan-400">
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs opacity-90">
+                                <thead class="bg-black/40 uppercase font-semibold border-b border-slate-800">
+                                    <tr>
+                                        <th class="py-3 px-4">Fecha</th>
+                                        <th class="py-3 px-4">Cliente / CC</th>
+                                        <th class="py-3 px-4">WhatsApp</th>
+                                        <th class="py-3 px-4">Ciudad</th>
+                                        <th class="py-3 px-4">Estado</th>
+                                        <th class="py-3 px-4">Venta Por</th>
+                                        <th class="py-3 px-4">Asesor</th>
+                                        <th class="py-3 px-4 text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="clients-table-body" class="divide-y divide-slate-800/60"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 3: RECALENTAR CLIENTES -->
+                <section id="tab-warmup" class="tab-content hidden space-y-6">
+                    <div class="theme-card border rounded-2xl p-6 sm:p-8 shadow-xl">
+                        <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-800">
+                            <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-fire"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold">Recalentar Prospectos (Seguimiento WhatsApp)</h2>
+                                <p class="text-xs opacity-70">Exclusivo para clientes que "No compraron" o "Están pensándolo". Los clientes que compraron quedan excluidos automáticamente.</p>
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs opacity-90">
+                                <thead class="bg-black/40 uppercase font-semibold border-b border-slate-800">
+                                    <tr>
+                                        <th class="py-3 px-4">Cliente</th>
+                                        <th class="py-3 px-4">WhatsApp</th>
+                                        <th class="py-3 px-4">Ciudad</th>
+                                        <th class="py-3 px-4">Estado</th>
+                                        <th class="py-3 px-4">Estado Recalentado</th>
+                                        <th class="py-3 px-4 text-center">Acción Directa</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="warmup-table-body" class="divide-y divide-slate-800/60"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 4: MARKETING & AUDITORÍA DE RECALENTAMIENTO -->
+                <section id="tab-marketing" class="tab-content hidden space-y-6">
+                    <div class="theme-card border border-emerald-500/30 rounded-2xl p-6 sm:p-8 shadow-xl space-y-6">
+                        <div class="flex items-center gap-3 pb-4 border-b border-slate-800">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-chart-line"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold text-emerald-400">Panel de Marketing & Métricas</h2>
+                                <p class="text-xs opacity-70">Análisis de rendimiento por asesor, ventas cerradas y auditoría de prospectos sin recalentar.</p>
+                            </div>
+                        </div>
+
+                        <!-- Filtro por Asesor para Marketing -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="theme-input p-4 rounded-xl border">
+                                <label class="block text-xs font-semibold mb-2">Filtrar por Asesor:</label>
+                                <select id="marketing-filter-asesor" onchange="renderMarketingDashboard()" class="w-full px-3 py-2 theme-card border rounded-lg text-xs outline-none">
+                                    <option value="ALL">Todos los asesores</option>
                                 </select>
                             </div>
-                            <div class="flex items-center gap-4">
-                                <label class="text-xs opacity-80">Avatar:</label>
-                                <label><input type="radio" name="new-avatar" value="fa-robot" checked> 🤖 Robot</label>
-                                <label><input type="radio" name="new-avatar" value="fa-user-ninja"> 🥷 Ninja</label>
-                                <label><input type="radio" name="new-avatar" value="fa-user-tie"> 👔 Ejecutivo</label>
+                            <div class="theme-input p-4 rounded-xl border flex flex-col justify-center">
+                                <span class="text-xs text-slate-400">Total Ventas Registradas</span>
+                                <span id="mkt-total-sales" class="text-2xl font-black text-emerald-400">0</span>
                             </div>
-                            <button type="submit" class="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-lg text-xs">Crear Perfil</button>
+                            <div class="theme-input p-4 rounded-xl border flex flex-col justify-center">
+                                <span class="text-xs text-slate-400">Prospectos Sin Recalentar</span>
+                                <span id="mkt-pending-warmup" class="text-2xl font-black text-amber-400">0</span>
+                            </div>
+                        </div>
+
+                        <!-- Ranking de Asesores -->
+                        <div class="space-y-3">
+                            <h3 class="text-sm font-bold text-emerald-300">Ranking de Ventas por Asesor</h3>
+                            <div id="mkt-sales-ranking" class="grid grid-cols-1 sm:grid-cols-3 gap-4"></div>
+                        </div>
+
+                        <!-- Auditoría de Recalentamiento -->
+                        <div class="space-y-3">
+                            <h3 class="text-sm font-bold text-amber-300">Auditoría: Prospectos Pendientes de Recalentar por Asesor</h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-xs opacity-90">
+                                    <thead class="bg-black/40 uppercase font-semibold border-b border-slate-800">
+                                        <tr>
+                                            <th class="py-2 px-3">Cliente</th>
+                                            <th class="py-2 px-3">WhatsApp</th>
+                                            <th class="py-2 px-3">Asesor Asignado</th>
+                                            <th class="py-2 px-3">Estado Recalentado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="mkt-warmup-audit-body" class="divide-y divide-slate-800/60"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 5: CONFIGURACIÓN Y ADMINISTRACIÓN (SOLO ADMIN JEAN) -->
+                <section id="tab-admin" class="tab-content hidden space-y-6">
+                    <div class="theme-card border border-purple-500/30 rounded-2xl p-6 sm:p-8 shadow-xl space-y-6">
+                        <div class="flex items-center gap-3 pb-4 border-b border-slate-800">
+                            <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-400 flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold text-purple-300">Panel de Configuración Global (Administrador)</h2>
+                                <p class="text-xs opacity-70">Crea nuevos perfiles de usuario, gestiona asesores y asigna permisos.</p>
+                            </div>
+                        </div>
+
+                        <!-- Formulario para crear usuario -->
+                        <form onsubmit="handleCreateProfile(event)" class="theme-input p-5 rounded-2xl border space-y-4">
+                            <h3 class="text-sm font-bold text-cyan-300 flex items-center gap-2">
+                                <i class="fa-solid fa-user-gear"></i> Crear Nuevo Perfil Institucional
+                            </h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold mb-1 opacity-80">Nombre de Usuario</label>
+                                    <input type="text" id="new-user" required placeholder="Ej. carlos_asesor" class="w-full px-3 py-2 theme-card border rounded-xl text-xs outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold mb-1 opacity-80">Contraseña</label>
+                                    <input type="password" id="new-pass" required placeholder="••••••••" class="w-full px-3 py-2 theme-card border rounded-xl text-xs outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold mb-1 opacity-80">Rol de Acceso</label>
+                                    <select id="new-role" class="w-full px-3 py-2 theme-card border rounded-xl text-xs outline-none">
+                                        <option value="Asesor">Asesor (Solo ve su propia cartera)</option>
+                                        <option value="Administrador">Administrador (Control total + Ventas)</option>
+                                        <option value="Marketing">Marketing (Auditoría + Analítica)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold mb-2 opacity-80">Avatar Inicial Asignado:</label>
+                                <div class="flex items-center gap-4 text-xs">
+                                    <label class="flex items-center gap-1.5 cursor-pointer"><input type="radio" name="new-avatar" value="fa-robot" checked> 🤖 Robot</label>
+                                    <label class="flex items-center gap-1.5 cursor-pointer"><input type="radio" name="new-avatar" value="fa-user-ninja"> 🥷 Ninja</label>
+                                    <label class="flex items-center gap-1.5 cursor-pointer"><input type="radio" name="new-avatar" value="fa-user-tie"> 👔 Ejecutivo</label>
+                                    <label class="flex items-center gap-1.5 cursor-pointer"><input type="radio" name="new-avatar" value="fa-user-astronaut"> 👨‍🚀 Astronauta</label>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="px-5 py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl text-xs transition shadow-lg shadow-purple-500/20">
+                                CREAR USUARIO
+                            </button>
                         </form>
 
-                        <!-- Lista de usuarios creados -->
-                        <div>
-                            <h3 class="text-sm font-bold mb-2">Usuarios Registrados en el Sistema</h3>
-                            <table class="w-full text-left text-xs">
-                                <thead><tr class="border-b border-slate-800"><th class="py-2">Usuario</th><th class="py-2">Rol</th><th class="py-2">Avatar</th><th class="py-2 text-center">Acción</th></tr></thead>
-                                <tbody id="profiles-table-body"></tbody>
-                            </table>
+                        <!-- Tabla de usuarios activos -->
+                        <div class="space-y-3">
+                            <h3 class="text-sm font-bold">Usuarios Registrados en el Sistema</h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-xs opacity-90">
+                                    <thead class="bg-black/40 uppercase font-semibold border-b border-slate-800">
+                                        <tr>
+                                            <th class="py-2.5 px-3">Usuario</th>
+                                            <th class="py-2.5 px-3">Contraseña</th>
+                                            <th class="py-2.5 px-3">Rol</th>
+                                            <th class="py-2.5 px-3">Avatar</th>
+                                            <th class="py-2.5 px-3 text-center">Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="profiles-table-body" class="divide-y divide-slate-800/60"></tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -254,11 +587,48 @@
         </div>
     </div>
 
+    <!-- MODAL DE PERSONALIZACIÓN (TEMA Y AVATAR) PARA CUALQUIER USUARIO -->
+    <div id="custom-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="w-full max-w-md theme-card border rounded-2xl p-6 shadow-2xl space-y-5">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="font-bold text-sm flex items-center gap-2"><i class="fa-solid fa-palette text-cyan-400"></i> Personalizar Perfil & Apariencia</h3>
+                <button onclick="closeCustomizationModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <!-- Seleccionar Tema -->
+            <div>
+                <label class="block text-xs font-semibold mb-2">Tema de Fondo y Colores:</label>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                    <button onclick="applyTheme('theme-cyberpunk')" class="p-2.5 rounded-xl border border-cyan-500/30 bg-slate-900 text-cyan-300 font-semibold">Cyberpunk Neon</button>
+                    <button onclick="applyTheme('theme-midnight')" class="p-2.5 rounded-xl border border-blue-500/30 bg-slate-950 text-blue-300 font-semibold">Midnight Blue</button>
+                    <button onclick="applyTheme('theme-emerald')" class="p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-950 text-emerald-300 font-semibold">Emerald Green</button>
+                    <button onclick="applyTheme('theme-sunset')" class="p-2.5 rounded-xl border border-rose-500/30 bg-rose-950 text-rose-300 font-semibold">Sunset Purple</button>
+                </div>
+            </div>
+
+            <!-- Seleccionar Avatar -->
+            <div>
+                <label class="block text-xs font-semibold mb-2">Tu Avatar:</label>
+                <div class="grid grid-cols-4 gap-3">
+                    <button onclick="changeAvatar('fa-robot')" class="p-3 rounded-xl theme-input border flex items-center justify-center text-xl text-cyan-400"><i class="fa-solid fa-robot"></i></button>
+                    <button onclick="changeAvatar('fa-user-ninja')" class="p-3 rounded-xl theme-input border flex items-center justify-center text-xl text-purple-400"><i class="fa-solid fa-user-ninja"></i></button>
+                    <button onclick="changeAvatar('fa-user-astronaut')" class="p-3 rounded-xl theme-input border flex items-center justify-center text-xl text-blue-400"><i class="fa-solid fa-user-astronaut"></i></button>
+                    <button onclick="changeAvatar('fa-user-tie')" class="p-3 rounded-xl theme-input border flex items-center justify-center text-xl text-emerald-400"><i class="fa-solid fa-user-tie"></i></button>
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-2">
+                <button onclick="closeCustomizationModal()" class="px-5 py-2 bg-cyan-500 text-black font-bold rounded-xl text-xs">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Base de datos de usuarios con administrador principal 'jean'
+        // Usuarios iniciales con Administrador 'jean' / '172305'
         let users = JSON.parse(localStorage.getItem('loantech_users')) || [
             { username: 'jean', pass: '172305', role: 'Administrador', avatar: 'fa-robot' },
-            { username: 'asesor1', pass: '1234', role: 'Asesor', avatar: 'fa-user-tie' }
+            { username: 'asesor1', pass: '1234', role: 'Asesor', avatar: 'fa-user-tie' },
+            { username: 'marketing1', pass: '1234', role: 'Marketing', avatar: 'fa-user-astronaut' }
         ];
 
         let currentUser = null;
@@ -284,19 +654,29 @@
             document.getElementById('current-user-name').innerText = currentUser.username;
             document.getElementById('welcome-user-name').innerText = currentUser.username;
             document.getElementById('current-user-role').innerText = currentUser.role;
-            document.getElementById('user-avatar-display').innerHTML = `<i class="fa-solid ${currentUser.avatar} text-cyan-400"></i>`;
+            updateAvatarIcon(currentUser.avatar);
 
-            // Visibilidad de pestañas por rol
-            const adminTab = document.getElementById('nav-admin');
-            if (currentUser.role !== 'Administrador') {
-                adminTab.classList.add('hidden');
-            } else {
-                adminTab.classList.remove('hidden');
+            // Control de acceso a pestañas según ROL
+            const navRegister = document.getElementById('nav-register');
+            const navAdmin = document.getElementById('nav-admin');
+
+            if (currentUser.role === 'Marketing') {
+                navRegister.classList.add('hidden');
+                navAdmin.classList.add('hidden');
+                switchTab('marketing');
+            } else if (currentUser.role === 'Asesor') {
+                navRegister.classList.remove('hidden');
+                navAdmin.classList.add('hidden');
+                switchTab('register');
+            } else if (currentUser.role === 'Administrador') {
+                navRegister.classList.remove('hidden');
+                navAdmin.classList.remove('hidden');
+                switchTab('register');
             }
 
-            switchTab('register');
             renderClientsTable();
             renderWarmupTable();
+            renderMarketingDashboard();
             renderProfilesTable();
         }
 
@@ -311,9 +691,216 @@
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
             document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('bg-cyan-500', 'text-black'));
             const activeBtn = document.getElementById(`nav-${tabId}`);
             if (activeBtn) activeBtn.classList.add('bg-cyan-500', 'text-black');
+        }
+
+        function toggleFinanceField() {
+            const status = document.getElementById('client-purchase-status').value;
+            const container = document.getElementById('finance-field-container');
+            const select = document.getElementById('client-finance-platform');
+
+            if (status === 'Compró') {
+                container.classList.remove('hidden');
+                select.required = true;
+            } else {
+                container.classList.add('hidden');
+                select.required = false;
+                select.value = '';
+            }
+        }
+
+        function handleClientRegister(event) {
+            event.preventDefault();
+            const purchaseStatus = document.getElementById('client-purchase-status').value;
+
+            const newClient = {
+                id: Date.now(),
+                name: document.getElementById('client-name').value || 'Sin Nombre',
+                doc: document.getElementById('client-doc').value || 'N/A',
+                whatsapp: document.getElementById('client-whatsapp').value,
+                city: document.getElementById('client-city').value,
+                purchaseStatus: purchaseStatus,
+                financePlatform: purchaseStatus === 'Compró' ? document.getElementById('client-finance-platform').value : 'N/A',
+                commitmentStatus: document.getElementById('client-commitment-status').value,
+                notes: document.getElementById('client-notes').value,
+                asesor: currentUser.username,
+                warmedUp: false,
+                warmedUpAt: null,
+                date: new Date().toISOString().split('T')[0]
+            };
+
+            clients.push(newClient);
+            localStorage.setItem('loantech_clients', JSON.stringify(clients));
+            document.getElementById('client-form').reset();
+            toggleFinanceField();
+            alert('¡Cliente guardado exitosamente!');
+
+            switchTab('clients');
+            renderClientsTable();
+            renderWarmupTable();
+            renderMarketingDashboard();
+        }
+
+        function renderClientsTable() {
+            const tbody = document.getElementById('clients-table-body');
+            tbody.innerHTML = '';
+
+            let visible = clients;
+            if (currentUser?.role === 'Asesor') {
+                visible = clients.filter(c => c.asesor === currentUser.username);
+                document.getElementById('client-view-badge').innerText = 'Cartera Privada';
+            } else {
+                document.getElementById('client-view-badge').innerText = 'Vista Global';
+            }
+
+            const search = document.getElementById('search-clients').value.toLowerCase();
+            const filtered = visible.filter(c => c.name.toLowerCase().includes(search) || c.whatsapp.includes(search) || c.city.toLowerCase().includes(search));
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-500">No hay clientes registrados.</td></tr>`;
+                return;
+            }
+
+            filtered.forEach(c => {
+                tbody.innerHTML += `
+                    <tr class="hover:bg-black/20 transition">
+                        <td class="py-3 px-4">${c.date}</td>
+                        <td class="py-3 px-4 font-bold">${c.name}<br><span class="text-[10px] text-slate-400 font-normal">CC: ${c.doc}</span></td>
+                        <td class="py-3 px-4 text-emerald-400 font-semibold"><i class="fa-brands fa-whatsapp"></i> ${c.whatsapp}</td>
+                        <td class="py-3 px-4">${c.city}</td>
+                        <td class="py-3 px-4">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${c.purchaseStatus === 'Compró' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'}">
+                                ${c.purchaseStatus}
+                            </span>
+                        </td>
+                        <td class="py-3 px-4 font-semibold text-emerald-300">${c.financePlatform || 'N/A'}</td>
+                        <td class="py-3 px-4 font-mono text-cyan-300">@${c.asesor}</td>
+                        <td class="py-3 px-4 text-center">
+                            ${(currentUser?.role === 'Administrador' || c.asesor === currentUser?.username) ? `<button onclick="deleteClient(${c.id})" class="text-rose-400 hover:text-rose-300 p-1"><i class="fa-solid fa-trash"></i></button>` : ''}
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function renderWarmupTable() {
+            const tbody = document.getElementById('warmup-table-body');
+            tbody.innerHTML = '';
+
+            let visible = clients;
+            if (currentUser?.role === 'Asesor') {
+                visible = clients.filter(c => c.asesor === currentUser.username);
+            }
+
+            // REGLA: Los que compraron NO se recalientan
+            const warmupList = visible.filter(c => c.purchaseStatus !== 'Compró');
+
+            if (warmupList.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-slate-500">¡Sin prospectos pendientes por recalentar!</td></tr>`;
+                return;
+            }
+
+            warmupList.forEach(c => {
+                const msg = encodeURIComponent(`Hola ${c.name}, te saludamos de Loantech. Notamos tu interés en renovar smartphone. ¡Tenemos aprobación facilito hoy! ¿Te ayudamos con el proceso?`);
+                tbody.innerHTML += `
+                    <tr class="hover:bg-black/20 transition">
+                        <td class="py-3 px-4 font-bold">${c.name}</td>
+                        <td class="py-3 px-4 text-emerald-400 font-semibold">${c.whatsapp}</td>
+                        <td class="py-3 px-4">${c.city}</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-[10px] bg-amber-500/20 text-amber-300">${c.purchaseStatus}</span></td>
+                        <td class="py-3 px-4">
+                            ${c.warmedUp 
+                                ? `<span class="text-emerald-400 font-bold text-[10px]"><i class="fa-solid fa-check-double"></i> Recalentado (${c.warmedUpAt})</span>` 
+                                : `<span class="text-amber-400 font-bold text-[10px]"><i class="fa-solid fa-clock"></i> Pendiente</span>`}
+                        </td>
+                        <td class="py-3 px-4 text-center">
+                            <a href="https://wa.me/${c.whatsapp}?text=${msg}" target="_blank" onclick="markAsWarmedUp(${c.id})" class="px-3 py-1.5 rounded-xl bg-emerald-500 text-black font-bold text-[11px] inline-flex items-center gap-1.5 hover:opacity-90 transition">
+                                <i class="fa-brands fa-whatsapp"></i> Enviar & Marcar Recalentado
+                            </a>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function markAsWarmedUp(clientId) {
+            const client = clients.find(c => c.id === clientId);
+            if (client) {
+                client.warmedUp = true;
+                client.warmedUpAt = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                localStorage.setItem('loantech_clients', JSON.stringify(clients));
+                setTimeout(() => {
+                    renderWarmupTable();
+                    renderMarketingDashboard();
+                }, 1000);
+            }
+        }
+
+        function renderMarketingDashboard() {
+            // Llenar selector de asesores
+            const select = document.getElementById('marketing-filter-asesor');
+            const advisors = users.filter(u => u.role === 'Asesor').map(u => u.username);
+            
+            select.innerHTML = `<option value="ALL">Todos los asesores</option>`;
+            advisors.forEach(a => {
+                select.innerHTML += `<option value="${a}">@${a}</option>`;
+            });
+
+            const filterVal = select.value;
+            let filteredClients = clients;
+            if (filterVal !== 'ALL') {
+                filteredClients = clients.filter(c => c.asesor === filterVal);
+            }
+
+            // Metricas
+            const sales = filteredClients.filter(c => c.purchaseStatus === 'Compró');
+            const pendingWarmup = filteredClients.filter(c => c.purchaseStatus !== 'Compró' && !c.warmedUp);
+
+            document.getElementById('mkt-total-sales').innerText = sales.length;
+            document.getElementById('mkt-pending-warmup').innerText = pendingWarmup.length;
+
+            // Ranking de ventas por Asesor
+            const rankingDiv = document.getElementById('mkt-sales-ranking');
+            rankingDiv.innerHTML = '';
+
+            advisors.forEach(a => {
+                const count = clients.filter(c => c.asesor === a && c.purchaseStatus === 'Compró').length;
+                rankingDiv.innerHTML += `
+                    <div class="theme-input p-4 rounded-xl border flex items-center justify-between">
+                        <div>
+                            <span class="block font-bold text-xs text-cyan-300">@${a}</span>
+                            <span class="text-[10px] text-slate-400">Ventas completadas</span>
+                        </div>
+                        <span class="text-xl font-black text-emerald-400">${count}</span>
+                    </div>
+                `;
+            });
+
+            // Tabla Auditoria de Recalentamiento
+            const auditBody = document.getElementById('mkt-warmup-audit-body');
+            auditBody.innerHTML = '';
+
+            const unWarmed = filteredClients.filter(c => c.purchaseStatus !== 'Compró');
+            if (unWarmed.length === 0) {
+                auditBody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-slate-500">Sin prospectos pendientes.</td></tr>`;
+                return;
+            }
+
+            unWarmed.forEach(c => {
+                auditBody.innerHTML += `
+                    <tr>
+                        <td class="py-2 px-3 font-bold">${c.name}</td>
+                        <td class="py-2 px-3 text-emerald-400">${c.whatsapp}</td>
+                        <td class="py-2 px-3 font-mono text-cyan-300">@${c.asesor}</td>
+                        <td class="py-2 px-3">
+                            ${c.warmedUp ? `<span class="text-emerald-400 font-bold">Recalentado</span>` : `<span class="text-amber-400 font-bold">NO RECALENTADO</span>`}
+                        </td>
+                    </tr>
+                `;
+            });
         }
 
         function handleCreateProfile(event) {
@@ -323,29 +910,32 @@
             const role = document.getElementById('new-role').value;
             const avatar = document.querySelector('input[name="new-avatar"]:checked').value;
 
-            if(users.some(u => u.username === username)) {
-                alert('El usuario ya existe');
+            if (users.some(u => u.username === username)) {
+                alert('El nombre de usuario ya existe en el sistema.');
                 return;
             }
 
             users.push({ username, pass, role, avatar });
             localStorage.setItem('loantech_users', JSON.stringify(users));
-            alert('¡Perfil creado con éxito!');
+            alert('¡Perfil institucional creado exitosamente!');
             event.target.reset();
             renderProfilesTable();
+            renderMarketingDashboard();
         }
 
         function renderProfilesTable() {
             const tbody = document.getElementById('profiles-table-body');
             tbody.innerHTML = '';
+
             users.forEach(u => {
                 tbody.innerHTML += `
-                    <tr class="border-b border-slate-800/40">
-                        <td class="py-2 font-bold">${u.username}</td>
-                        <td class="py-2">${u.role}</td>
-                        <td class="py-2"><i class="fa-solid ${u.avatar} text-cyan-400"></i></td>
-                        <td class="py-2 text-center">
-                            ${u.username !== 'jean' ? `<button onclick="deleteUser('${u.username}')" class="text-rose-400 hover:text-rose-300"><i class="fa-solid fa-trash"></i></button>` : 'Principal'}
+                    <tr class="hover:bg-black/20 transition">
+                        <td class="py-2.5 px-3 font-bold">@${u.username}</td>
+                        <td class="py-2.5 px-3 font-mono text-slate-400">${u.pass}</td>
+                        <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[10px] bg-purple-500/20 text-purple-300 font-semibold">${u.role}</span></td>
+                        <td class="py-2.5 px-3 text-lg"><i class="fa-solid ${u.avatar} text-cyan-400"></i></td>
+                        <td class="py-2.5 px-3 text-center">
+                            ${u.username !== 'jean' ? `<button onclick="deleteUser('${u.username}')" class="text-rose-400 hover:text-rose-300 p-1"><i class="fa-solid fa-trash"></i></button>` : '<span class="text-[10px] text-slate-500">Principal</span>'}
                         </td>
                     </tr>
                 `;
@@ -353,52 +943,50 @@
         }
 
         function deleteUser(username) {
-            if(confirm(`¿Eliminar usuario ${username}?`)) {
+            if (confirm(`¿Estás seguro de eliminar al usuario @${username}?`)) {
                 users = users.filter(u => u.username !== username);
                 localStorage.setItem('loantech_users', JSON.stringify(users));
                 renderProfilesTable();
+                renderMarketingDashboard();
             }
         }
 
-        function handleClientRegister(event) {
-            event.preventDefault();
-            clients.push({
-                id: Date.now(),
-                name: document.getElementById('client-name').value || 'Sin Nombre',
-                whatsapp: document.getElementById('client-whatsapp').value,
-                city: document.getElementById('client-city').value,
-                purchaseStatus: document.getElementById('client-purchase-status').value,
-                asesor: currentUser.username
-            });
-            localStorage.setItem('loantech_clients', JSON.stringify(clients));
-            document.getElementById('client-form').reset();
-            alert('¡Cliente registrado con éxito!');
-            switchTab('clients');
-            renderClientsTable();
-            renderWarmupTable();
+        function deleteClient(id) {
+            if (confirm('¿Estás seguro de eliminar este registro de cliente?')) {
+                clients = clients.filter(c => c.id !== id);
+                localStorage.setItem('loantech_clients', JSON.stringify(clients));
+                renderClientsTable();
+                renderWarmupTable();
+                renderMarketingDashboard();
+            }
         }
 
-        function renderClientsTable() {
-            const tbody = document.getElementById('clients-table-body');
-            tbody.innerHTML = '';
-            let visible = currentUser?.role === 'Administrador' ? clients : clients.filter(c => c.asesor === currentUser?.username);
-            document.getElementById('client-view-badge').innerText = currentUser?.role === 'Administrador' ? 'Global (Admin)' : 'Privada (Tus registros)';
-            if(visible.length === 0) { tbody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-slate-500">No hay registros</td></tr>`; return; }
-            visible.forEach(c => {
-                tbody.innerHTML += `<tr class="border-b border-slate-800/40"><td class="py-2 font-bold">${c.name}</td><td class="py-2 text-emerald-400">${c.whatsapp}</td><td class="py-2">${c.city}</td><td class="py-2">${c.purchaseStatus}</td><td class="py-2 font-mono text-cyan-300">@${c.asesor}</td></tr>`;
-            });
+        // MODAL Y TEMAS
+        function openCustomizationModal() { document.getElementById('custom-modal').classList.remove('hidden'); }
+        function closeCustomizationModal() { document.getElementById('custom-modal').classList.add('hidden'); }
+
+        function applyTheme(themeName) {
+            document.body.className = `${themeName} min-h-screen flex flex-col justify-between selection:bg-cyan-500 selection:text-black`;
+            localStorage.setItem('loantech_theme', themeName);
         }
 
-        function renderWarmupTable() {
-            const tbody = document.getElementById('warmup-table-body');
-            tbody.innerHTML = '';
-            let visible = currentUser?.role === 'Administrador' ? clients : clients.filter(c => c.asesor === currentUser?.username);
-            let warmup = visible.filter(c => c.purchaseStatus !== 'Compró');
-            if(warmup.length === 0) { tbody.innerHTML = `<tr><td colspan="3" class="py-4 text-center text-slate-500">Sin pendientes</td></tr>`; return; }
-            warmup.forEach(c => {
-                tbody.innerHTML += `<tr class="border-b border-slate-800/40"><td class="py-2 font-bold">${c.name}</td><td class="py-2 text-emerald-400">${c.whatsapp}</td><td class="py-2 text-center"><a href="https://wa.me/${c.whatsapp}" target="_blank" class="px-2 py-1 bg-emerald-500 text-black rounded font-bold text-[11px]">WhatsApp</a></td></tr>`;
-            });
+        function changeAvatar(avatarIcon) {
+            if (currentUser) {
+                currentUser.avatar = avatarIcon;
+                const userObj = users.find(u => u.username === currentUser.username);
+                if (userObj) userObj.avatar = avatarIcon;
+                localStorage.setItem('loantech_users', JSON.stringify(users));
+                updateAvatarIcon(avatarIcon);
+            }
         }
+
+        function updateAvatarIcon(avatarIcon) {
+            document.getElementById('user-avatar-display').innerHTML = `<i class="fa-solid ${avatarIcon} text-cyan-400"></i>`;
+        }
+
+        // Cargar tema guardado
+        const savedTheme = localStorage.getItem('loantech_theme');
+        if (savedTheme) applyTheme(savedTheme);
     </script>
 </body>
 </html>
