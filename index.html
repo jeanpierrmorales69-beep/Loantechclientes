@@ -586,7 +586,7 @@
         const firebaseConfig = {
             apiKey: "AIzaSyBHKKt46qEYAxy6J6x1lGarIFd-7sXXOE",
             authDomain: "loantechclientes.firebaseapp.com",
-            databaseURL: "https://loantechclienten-default-rtdb.firebaseio.com", // Asegúrate que coincida con tu URL exacta de Realtime Database
+            databaseURL: "https://loantechclientes-default-rtdb.firebaseio.com",
             projectId: "loantechclientes",
             storageBucket: "loantechclientes.appspot.com",
             messagingSenderId: "313515132903",
@@ -610,9 +610,8 @@
         db.ref('users').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
-                users = Object.values(data);
+                users = Array.isArray(data) ? data : Object.values(data);
             } else {
-                // Si la base de datos está vacía, inicializamos con los usuarios por defecto
                 users = defaultUsers;
                 db.ref('users').set(defaultUsers);
             }
@@ -740,7 +739,6 @@
                 date: new Date().toISOString().split('T')[0]
             };
 
-            // Guardar en Firebase Cloud
             db.ref('clients/' + clientId).set(newClient).then(() => {
                 document.getElementById('client-form').reset();
                 toggleFinanceField();
@@ -921,7 +919,6 @@
             const newUser = { username, pass, role, avatar };
             users.push(newUser);
             
-            // Guardar usuarios actualizados en la nube
             const usersObj = {};
             users.forEach((u, index) => { usersObj[index] = u; });
             db.ref('users').set(usersObj).then(() => {
