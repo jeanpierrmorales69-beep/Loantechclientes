@@ -112,13 +112,13 @@
 
     <div id="app" class="min-h-screen flex flex-col">
 
-        <!-- ================= LOGIN SCREEN SEGURO (SIN CREDENCIALES VISIBLES) ================= -->
+        <!-- ================= LOGIN SCREEN SEGURO ================= -->
         <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4">
             <div class="w-full max-w-md p-8 theme-card rounded-2xl border glow-effect relative overflow-hidden shadow-2xl">
                 <div class="text-center mb-6 relative z-10">
                     <div class="flex justify-center items-center gap-2 mb-2">
-                        <div class="w-12 h-12 flex items-center justify-center rounded-xl gradient-bg shadow-lg shadow-cyan-500/30">
-                            <i class="fa-solid fa-mobile-screen-button text-2xl text-black"></i>
+                        <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-black/40 border border-cyan-500/40 overflow-hidden shadow-lg shadow-cyan-500/30">
+                            <img src="logo.png" alt="Logo" class="w-full h-full object-cover">
                         </div>
                         <span class="text-3xl font-extrabold tracking-tight">Loan<span class="gradient-text">tech</span></span>
                     </div>
@@ -148,14 +148,14 @@
         <!-- ================= MAIN DASHBOARD ================= -->
         <div id="main-content" class="hidden flex-1 flex flex-col">
 
-            <!-- NAVBAR -->
+            <!-- NAVBAR CON LOGO -->
             <header class="theme-card border-b sticky top-0 z-40 backdrop-blur-md">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex items-center justify-between h-20">
                         
                         <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('register')">
-                            <div class="w-10 h-10 flex items-center justify-center rounded-xl gradient-bg shadow-md">
-                                <i class="fa-solid fa-mobile-screen-button text-xl text-black"></i>
+                            <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-black/40 border border-cyan-500/40 overflow-hidden shadow-md shadow-cyan-500/20">
+                                <img src="logo.png" alt="Logo" class="w-full h-full object-cover">
                             </div>
                             <div>
                                 <span class="text-2xl font-black tracking-tight">Loan<span class="gradient-text">tech</span></span>
