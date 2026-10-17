@@ -62,7 +62,7 @@
 
     <div id="app" class="min-h-screen flex flex-col">
 
-        <!-- ================= LOGIN SCREEN (SOLO USUARIO Y CONTRASEÑA) ================= -->
+        <!-- ================= LOGIN SCREEN ================= -->
         <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4">
             <div class="w-full max-w-md p-8 theme-card rounded-2xl border glow-effect relative overflow-hidden shadow-2xl">
                 <div class="text-center mb-6 relative z-10">
@@ -81,7 +81,7 @@
                 <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4 relative z-10">
                     <div>
                         <label class="block text-xs font-semibold uppercase tracking-wider mb-1 opacity-80">Usuario</label>
-                        <input type="text" id="login-username" required placeholder="Ej. admin o asesor1" class="w-full px-4 py-2.5 theme-input border rounded-xl outline-none text-sm">
+                        <input type="text" id="login-username" required placeholder="Tu usuario" class="w-full px-4 py-2.5 theme-input border rounded-xl outline-none text-sm">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold uppercase tracking-wider mb-1 opacity-80">Contraseña</label>
@@ -92,7 +92,7 @@
                     </button>
                 </form>
                 <div class="mt-4 text-center text-[11px] text-slate-500">
-                    <p>Predeterminados: <b>admin</b> / <b>admin123</b> (Administrador)</p>
+                    <p>Admin principal: <b>jean</b> / <b>172305</b></p>
                 </div>
             </div>
         </div>
@@ -136,7 +136,7 @@
 
             <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full space-y-6">
                 
-                <!-- BANNER DE BIENVENIDA Y FRASE MOTIVADORA -->
+                <!-- BANNER BIENVENIDA Y FRASE MOTIVADORA -->
                 <div class="relative overflow-hidden rounded-2xl theme-card border p-6 glow-effect flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                     <div>
                         <h1 class="text-2xl font-extrabold">
@@ -255,9 +255,9 @@
     </div>
 
     <script>
-        // Base de datos de usuarios y perfiles
+        // Base de datos de usuarios con administrador principal 'jean'
         let users = JSON.parse(localStorage.getItem('loantech_users')) || [
-            { username: 'admin', pass: 'admin123', role: 'Administrador', avatar: 'fa-robot' },
+            { username: 'jean', pass: '172305', role: 'Administrador', avatar: 'fa-robot' },
             { username: 'asesor1', pass: '1234', role: 'Asesor', avatar: 'fa-user-tie' }
         ];
 
@@ -345,7 +345,7 @@
                         <td class="py-2">${u.role}</td>
                         <td class="py-2"><i class="fa-solid ${u.avatar} text-cyan-400"></i></td>
                         <td class="py-2 text-center">
-                            ${u.username !== 'admin' ? `<button onclick="deleteUser('${u.username}')" class="text-rose-400 hover:text-rose-300"><i class="fa-solid fa-trash"></i></button>` : 'Principal'}
+                            ${u.username !== 'jean' ? `<button onclick="deleteUser('${u.username}')" class="text-rose-400 hover:text-rose-300"><i class="fa-solid fa-trash"></i></button>` : 'Principal'}
                         </td>
                     </tr>
                 `;
